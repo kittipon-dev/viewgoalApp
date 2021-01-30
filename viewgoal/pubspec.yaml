@@ -32,6 +32,11 @@ dependencies:
   date_time_picker: "^1.1.1"
   shared_preferences: ^0.5.12+4
 
+  font_awesome_flutter: ^8.8.1
+  carousel_slider: ^2.2.1
+  url_launcher: ^5.5.2
+  scrollable_positioned_list: ^0.1.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -53,7 +58,17 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/logo.png
-
+    - assets/img/pro-background.png
+    - assets/img/onboard-background.png
+    - assets/img/logo-android.png
+    - assets/img/logo-ios.png
+    - assets/img/logo-argon.png
+    - assets/img/profile-screen-avatar.jpg
+    - assets/img/profile-screen-bg.png
+    - assets/img/register-bg.png
+    - assets/img/chat-avatar.jpeg
+    - assets/img/argon-logo.png
+    - assets/img/argon-logo-onboarding.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -79,3 +94,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans-Regular.ttf
+        - asset: assets/fonts/OpenSans-Light.ttf
+          weight: 200
+        - asset: assets/fonts/OpenSans-Bold.ttf
+          weight: 600

@@ -12,6 +12,15 @@ import 'dart:convert';
 
 import '../menu_bar.dart';
 
+
+import 'package:viewgoal/widgets/card-category.dart';
+import 'package:viewgoal/widgets/card-horizontal.dart';
+import 'package:viewgoal/widgets/card-small.dart';
+import 'package:viewgoal/widgets/card-square.dart';
+import 'package:viewgoal/widgets/drawer.dart';
+import 'package:viewgoal/widgets/navbar.dart';
+import 'package:viewgoal/widgets/slider-product.dart';
+
 var cJson = [];
 
 class HomePage extends StatefulWidget {
