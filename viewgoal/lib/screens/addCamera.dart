@@ -44,7 +44,7 @@ class _MyHomePageState extends State<addCameraPage> {
   Future<void> _save() async {
     if (_formAdd.currentState.validate()) {
       final http.Response response = await http.post(
-        hostname + '/addCamera',
+        hostname + '/addcamera',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

@@ -46,24 +46,9 @@ class _MyHomePageState extends State<registerPage> {
           }),
         );
         if (response.statusCode == 200) {
-          Map<String, dynamic> r = jsonDecode(response.body);
-
-          if (r["s"] == 0) {
-            setState(() {
-              error = r["ss"] + "มีผู้ใช้งานนี้แล้ว";
-            });
-          } else if (r["s"] == 1) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoginPage(),
-              ),
-            );
-          }
+          Navigator.pop(context);
         } else {
-          // If the server did not return a 201 CREATED response,
-          // then throw an exception.
-          throw Exception('Failed to load album');
+          print("NO ok");
         }
       } else {
         setState(() {
