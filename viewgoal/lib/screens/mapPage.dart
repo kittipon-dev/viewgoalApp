@@ -67,10 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-      );
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
+              (Route<dynamic> route) => false);
     });
   }
 

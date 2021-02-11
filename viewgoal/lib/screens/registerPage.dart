@@ -29,9 +29,7 @@ class _MyHomePageState extends State<registerPage> {
   String error = "";
 
   Future<void> register() async {
-    print("r");
     if (_formKey.currentState.validate()) {
-      print('Form Complete');
       if (password.text == trypassword.text) {
         final http.Response response = await http.post(
           hostname + '/register',

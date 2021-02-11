@@ -7,12 +7,14 @@ import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
+import 'package:viewgoal/screens/playPage.dart';
 import 'dart:async';
 import 'dart:convert';
 
 import '../menu_bar.dart';
 
 var cJson = [];
+var cJsonF = [];
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -29,24 +31,24 @@ class _MyHomePageState extends State<HomePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     slogin = await prefs.get('login');
     if (slogin != 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      );
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (Route<dynamic> route) => false);
     } else if (slogin == 1) {
       user_id = prefs.get('user_id');
+      listplaying(user_id.toString());
     }
   }
 
-  Future<void> list() async {
-    var request = http.Request('GET', Uri.parse(hostname + '/list'));
+  Future<void> listplaying(id) async {
+    var request = http.Request('GET', Uri.parse(hostname + '/listplaying?user_id='+id));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
-      List<dynamic> list = json.decode(receivedJson);
-      cJson = list;
+      var req = {};
+      req = jsonDecode(receivedJson);
+      cJson = req["listplay"];
+      cJsonF= req["favorite"];
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -66,10 +68,10 @@ class _MyHomePageState extends State<HomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-      );
+
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
+          (Route<dynamic> route) => false);
     });
   }
 
@@ -117,7 +119,14 @@ class _MyHomePageState extends State<HomePage> {
                 itemCount: cJson.length,
                 itemBuilder: (context, index) {
                   return FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PlayPage(idcam: cJson[index]["_id"])),
+                      );
+                    },
                     child: Card(
                       margin: EdgeInsets.only(top: 10),
                       child: Container(
@@ -137,9 +146,15 @@ class _MyHomePageState extends State<HomePage> {
                             Container(
                               child: Row(
                                 children: [
-                                  Icon(
-                                    Icons.account_circle_outlined,
-                                    size: 50,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50.00),
+                                    child: Image.network(
+                                      hostname +
+                                          "/images-profile/" +
+                                          cJson[index]["user_id"].toString() +
+                                          ".png",
+                                      width: 40,
+                                    ),
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(left: 10),
@@ -149,13 +164,13 @@ class _MyHomePageState extends State<HomePage> {
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
-                                          child:
-                                              Text('${cJson[index]['title']}'),
+                                          child: Text("title: " +
+                                              cJson[index]['title']),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
-                                          child: Text(
-                                              '${cJson[index]['loaction']['name']}'),
+                                          child: Text("city: " +
+                                              cJson[index]['location']['name']),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 5),
@@ -170,7 +185,7 @@ class _MyHomePageState extends State<HomePage> {
                                                   children: [
                                                     Icon(Icons.favorite),
                                                     Text(
-                                                        '${cJson[index]['love']}')
+                                                        '${cJson[index]['like']}')
                                                   ],
                                                 ),
                                               ),
@@ -193,36 +208,85 @@ class _MyHomePageState extends State<HomePage> {
             ),
             Container(
               child: ListView.builder(
-                itemCount: 0,
+                itemCount: cJsonF.length,
                 itemBuilder: (context, index) {
                   return FlatButton(
-                    onPressed: () {},
-                    child: Container(
-                      child: Card(
-                        child: Row(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                PlayPage(idcam: cJsonF[index]["_id"])),
+                      );
+                    },
+                    child: Card(
+                      margin: EdgeInsets.only(top: 10),
+                      child: Container(
+                        width: double.infinity,
+                        child: Column(
                           children: [
                             Container(
-                              width: 150,
-                              height: 100,
+                              width: double.infinity,
+                              height: 200,
                               color: Color(0xFFF1771A),
                               child: Icon(
                                 Icons.play_circle_outline_outlined,
                                 color: Colors.white,
-                                size: 50,
+                                size: 150,
                               ),
                             ),
                             Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Row(
                                 children: [
-                                  Container(
-                                    child: Text("บ้านข้าเองง"),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(50.00),
+                                    child: Image.network(
+                                      hostname +
+                                          "/images-profile/" +
+                                          cJsonF[index]["user_id"].toString() +
+                                          ".png",
+                                      width: 40,
+                                    ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(top: 10),
-                                    child: Text("ลำปาง"),
-                                  ),
+                                    margin: EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: 3),
+                                          child: Text("title: " +
+                                              cJsonF[index]['title']),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 3),
+                                          child: Text("city: " +
+                                              cJsonF[index]['location']['name']),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 5),
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                  'view ${cJsonF[index]['view']}'),
+                                              Container(
+                                                margin:
+                                                EdgeInsets.only(left: 50),
+                                                child: Row(
+                                                  children: [
+                                                    Icon(Icons.favorite),
+                                                    Text(
+                                                        '${cJsonF[index]['like']}')
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
                             )

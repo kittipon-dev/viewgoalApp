@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
+import 'package:viewgoal/screens/userPage.dart';
 void main() {
   runApp(MyApp());
 }
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MePage(),
+      home: HomePage(),
     );
   }
 }

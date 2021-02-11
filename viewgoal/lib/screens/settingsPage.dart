@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/settings/About/community_guideliness.dart';
 import 'package:viewgoal/settings/About/copyright_policy.dart';
 import 'package:viewgoal/settings/About/privacy_policy.dart';
@@ -28,6 +30,15 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
+  Future<void> logout() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('login', 0);
+    prefs.setInt('user_id', 0);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (Route<dynamic> route) => false);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -682,12 +693,7 @@ class _SettingsState extends State<SettingsPage> {
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => LogOut(),
-                  ),
-                );
+                logout();
               },
               child: Padding(
                 padding: const EdgeInsets.only(right: 8, top: 10),
