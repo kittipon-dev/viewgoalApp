@@ -5,10 +5,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/settingsPage.dart';
+import 'package:viewgoal/settings/Account/manage_profile.dart';
 
 import '../config.dart';
 import '../menu_bar.dart';
 import 'addCamera.dart';
+import 'giftPage.dart';
 import 'homePage.dart';
 import 'mapPage.dart';
 import 'inboxPage.dart';
@@ -27,15 +29,15 @@ class MePage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MePage> {
-  int _selectedIndex = 3;
-  final page = [HomePage(), MapPage(), InboxPage(), MePage()];
+  int _selectedIndex = 4;
+  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     });
   }
 
@@ -167,9 +169,19 @@ class _MyStatefulWidgetState extends State<MePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    child: CircleAvatar(
-                      backgroundImage: NetworkImage(urlimgprofile),
-                      radius: 50,
+                    child: FlatButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ManagerProfile(),
+                          ),
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(urlimgprofile),
+                        radius: 50,
+                      ),
                     ),
                   ),
                   Container(

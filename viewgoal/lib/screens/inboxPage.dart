@@ -8,6 +8,8 @@ import 'dart:async';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
 
+import 'giftPage.dart';
+
 var cJson = [];
 
 class InboxPage extends StatefulWidget {
@@ -42,7 +44,7 @@ class _MyHomePageState extends State<InboxPage> {
   }
 
   int _selectedIndex = 2;
-  final page = [HomePage(), MapPage(), InboxPage(), MePage()];
+  final page = [HomePage(), MapPage(), InboxPage(),GiftPage(), MePage()];
 
   void _onItemTapped(int index) {
     setState(() {

@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../menu_bar.dart';
+import 'giftPage.dart';
 import 'mePage.dart';
 import 'inboxPage.dart';
 import 'homePage.dart';
@@ -62,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   int _selectedIndex = 1;
-  final page = [HomePage(), MapPage(), InboxPage(), MePage()];
+  final page = [HomePage(), MapPage(), InboxPage(),GiftPage(), MePage()];
 
   void _onItemTapped(int index) {
     setState(() {

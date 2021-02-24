@@ -14,6 +14,10 @@ List<BottomNavigationBarItem> menuBar = <BottomNavigationBarItem>[
     label: "Inbox",
   ),
   BottomNavigationBarItem(
+    icon: Icon(Icons.card_giftcard),
+    label: "Gift",
+  ),
+  BottomNavigationBarItem(
     icon: Icon(Icons.account_circle),
     label: "Me",
   ),

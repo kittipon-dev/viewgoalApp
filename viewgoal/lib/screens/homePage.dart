@@ -12,6 +12,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../menu_bar.dart';
+import 'giftPage.dart';
 
 var cJson = [];
 var cJsonF = [];
@@ -41,14 +42,15 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   Future<void> listplaying(id) async {
-    var request = http.Request('GET', Uri.parse(hostname + '/listplaying?user_id='+id));
+    var request =
+        http.Request('GET', Uri.parse(hostname + '/listplaying?user_id=' + id));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       var req = {};
       req = jsonDecode(receivedJson);
       cJson = req["listplay"];
-      cJsonF= req["favorite"];
+      cJsonF = req["favorite"];
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -63,7 +65,7 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   int _selectedIndex = 0;
-  final page = [HomePage(), MapPage(), InboxPage(), MePage()];
+  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -252,7 +254,7 @@ class _MyHomePageState extends State<HomePage> {
                                     margin: EdgeInsets.only(left: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
@@ -262,7 +264,8 @@ class _MyHomePageState extends State<HomePage> {
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
                                           child: Text("city: " +
-                                              cJsonF[index]['location']['name']),
+                                              cJsonF[index]['location']
+                                                  ['name']),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 5),
@@ -272,7 +275,7 @@ class _MyHomePageState extends State<HomePage> {
                                                   'view ${cJsonF[index]['view']}'),
                                               Container(
                                                 margin:
-                                                EdgeInsets.only(left: 50),
+                                                    EdgeInsets.only(left: 50),
                                                 child: Row(
                                                   children: [
                                                     Icon(Icons.favorite),

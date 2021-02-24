@@ -14,6 +14,8 @@ import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/userPage.dart';
 
+import 'giftPage.dart';
+
 var cJson = {};
 var list = [];
 var listF = [];
@@ -183,7 +185,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
   }
 
   int _selectedIndex = 0;
-  final page = [HomePage(), MapPage(), InboxPage(), MePage()];
+  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
 
   void _onItemTapped(int index) {
     setState(() {
