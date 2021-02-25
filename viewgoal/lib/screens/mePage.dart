@@ -19,7 +19,6 @@ List<dynamic> cJson = [];
 var req = {};
 var myME = {};
 
-/// This is the stateful widget that the main application instantiates.
 class MePage extends StatefulWidget {
   MePage({Key key}) : super(key: key);
 
@@ -27,7 +26,6 @@ class MePage extends StatefulWidget {
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
-/// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MePage> {
   int _selectedIndex = 4;
   final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
