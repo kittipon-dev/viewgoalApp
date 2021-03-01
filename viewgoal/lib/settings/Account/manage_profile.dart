@@ -108,10 +108,10 @@ class _MeScreenState extends State<ManagerProfile> {
                       child: CircleAvatar(
                         radius: 80,
                         backgroundImage: _image == null
-                            ? AssetImage("assets/pfp/default_pfp.jpg")
+                            ? AssetImage("assets/images/default-prof.png")
                             : FileImage(
-                          Io.File(_image.path),
-                        ),
+                                Io.File(_image.path),
+                              ),
                       ),
                     ),
                     // CircleAvatar(
