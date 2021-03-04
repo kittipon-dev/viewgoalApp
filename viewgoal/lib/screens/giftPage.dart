@@ -42,15 +42,12 @@ class _MyHomePageState extends State<GiftPage> {
   }
 
   Future<void> listplaying(id) async {
-    var request =
-        http.Request('GET', Uri.parse(hostname + '/listplaying?user_id=' + id));
+    var request = http.Request('GET', Uri.parse(hostname + '/getall_gift'));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       var req = {};
-      req = jsonDecode(receivedJson);
-      cJson = req["listplay"];
-      cJsonF = req["favorite"];
+      cJson = jsonDecode(receivedJson);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -109,7 +106,7 @@ class _MyHomePageState extends State<GiftPage> {
               ),
             ],
           ),
-          actions: [FlatButton(onPressed: () {}, child: Text("100 P"))],
+          actions: [FlatButton(onPressed: () {}, child: Text("0 P"))],
         ),
         body: TabBarView(
           children: [
@@ -118,22 +115,16 @@ class _MyHomePageState extends State<GiftPage> {
                 itemCount: cJson.length,
                 itemBuilder: (context, index) {
                   return FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PlayPage(idcam: cJson[index]["_id"])),
-                      );
-                    },
+                    onPressed: () {},
                     child: Card(
                       margin: EdgeInsets.only(top: 10),
                       child: Container(
                         width: double.infinity,
                         child: Container(
                           width: double.infinity,
-                          height: 200,
                           color: Color(0xFFF1771A),
+                          child: Image.network('http://192.168.2.14:3000' +
+                              cJson[index]["urlimg"].toString()),
                         ),
                       ),
                     ),

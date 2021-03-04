@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
 import 'package:viewgoal/menu_bar.dart';
+import 'package:viewgoal/screens/commentPage.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
@@ -15,6 +16,8 @@ import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/userPage.dart';
 
 import 'giftPage.dart';
+
+
 
 var cJson = {};
 var list = [];
@@ -313,7 +316,14 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                               ),
                               FlatButton(
                                 textColor: Colors.black,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            CommentPage(idcam: widget.idcam)),
+                                  );
+                                },
                                 child: Row(
                                   children: [
                                     Icon(Icons.comment_outlined),

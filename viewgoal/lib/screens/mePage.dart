@@ -43,7 +43,7 @@ class _MyStatefulWidgetState extends State<MePage> {
 
   int slogin;
   int username;
-  String urlimgprofile = hostname + '/images-profile/null.png';
+  var img = NetworkImage(hostname + '/images-profile/null.png');
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -76,8 +76,10 @@ class _MyStatefulWidgetState extends State<MePage> {
       list = await json.decode(receivedJson);
       cJson = await list[1];
        */
-      urlimgprofile = hostname + '/images-profile/${id}.png';
-      setState(() {});
+      img = NetworkImage(hostname + '/images-profile/${id}.png');
+      setState(() {
+
+      });
     }
   }
 
@@ -172,12 +174,12 @@ class _MyStatefulWidgetState extends State<MePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ManagerProfile(),
+                            builder: (context) => ManagerProfile(user_id: username,myme: myME,),
                           ),
                         );
                       },
                       child: CircleAvatar(
-                        backgroundImage: NetworkImage(urlimgprofile),
+                        backgroundImage: img,
                         radius: 50,
                       ),
                     ),
@@ -232,6 +234,8 @@ class _MyStatefulWidgetState extends State<MePage> {
                   ),
                 ],
               ),
+            ),SizedBox(
+              height: 20,
             ),
             Container(
               width: MediaQuery.of(context).size.width * 0.65,

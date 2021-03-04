@@ -1,11 +1,17 @@
 import 'dart:convert';
 import 'dart:io' as Io;
-
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:viewgoal/config.dart';
 
 class ManagerProfile extends StatefulWidget {
+  ManagerProfile({Key key, this.user_id, this.myme}) : super(key: key);
+  var user_id;
+  var myme;
+
   @override
   _MeScreenState createState() => _MeScreenState();
 }
@@ -13,8 +19,21 @@ class ManagerProfile extends StatefulWidget {
 class _MeScreenState extends State<ManagerProfile> {
   bool showPassword = false;
 
+  final textName = TextEditingController();
+  final textNote = TextEditingController();
+
   Io.File _image;
   final picker = ImagePicker();
+
+  String img64;
+
+  @override
+  void initState() {
+    super.initState();
+    print(widget.myme);
+    textName.text = widget.myme["name"];
+    textNote.text = widget.myme["note"];
+  }
 
   Future getImage() async {
     final pickedFile = await picker.getImage(
@@ -32,7 +51,7 @@ class _MeScreenState extends State<ManagerProfile> {
 
     // to base 64
     final bytes = Io.File(path).readAsBytesSync();
-    String img64 = base64Encode(bytes);
+    img64 = base64Encode(bytes);
     print(img64);
   }
 
@@ -65,6 +84,57 @@ class _MeScreenState extends State<ManagerProfile> {
     }
   }
 
+  Future<void> setProfile() async {
+    var headers = {'Content-Type': 'application/json'};
+    var request = http.Request('POST', Uri.parse(hostname + '/editprofile'));
+    request.body =
+        '''{\r\n    "user_id":"${widget.user_id}",\r\n    "name":"${textName.text}",\r\n    "note":"${textNote.text}"\r\n}''';
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      if (img64 == null) {
+        Navigator.pop(context);
+      } else {
+        upload(_image);
+      }
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  upload(File imageFile) async {
+    // open a bytestream
+    var stream = new http.ByteStream(imageFile.openRead());
+    // get file length
+    var length = await imageFile.length();
+
+    // string to uri
+    var uri = Uri.parse(hostname + "/editprofile-upimg");
+
+    // create multipart request
+    var request = new http.MultipartRequest("POST", uri);
+
+    // multipart that takes file
+    var multipartFile = new http.MultipartFile('myFile', stream, length,
+        filename: imageFile.path);
+
+    // add file to multipart
+    request.files.add(multipartFile);
+    request.fields['user_id'] = widget.user_id.toString();
+
+    // send
+    var response = await request.send();
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,8 +142,13 @@ class _MeScreenState extends State<ManagerProfile> {
         elevation: 1,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {},
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.amber[800],
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(
@@ -108,7 +183,7 @@ class _MeScreenState extends State<ManagerProfile> {
                       child: CircleAvatar(
                         radius: 80,
                         backgroundImage: _image == null
-                            ? AssetImage("assets/images/default-prof.png")
+                            ? NetworkImage(hostname + '/images-profile/${widget.user_id}.png')
                             : FileImage(
                                 Io.File(_image.path),
                               ),
@@ -149,10 +224,42 @@ class _MeScreenState extends State<ManagerProfile> {
               SizedBox(
                 height: 35,
               ),
-              buildTextField("Full Name", "Full Name", false, 15),
-              buildTextField("Email", "Email", false, 30),
-              buildTextField("Password", "Password", true, 15),
-              buildTextField("Location", "Location", false, 30),
+              Container(
+                child: Column(
+                  children: [
+                    TextField(
+                      controller: textName,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 3),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelText: "Full Name",
+                        labelStyle: TextStyle(fontSize: 20),
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 35,
+                    ),
+                    TextField(
+                      controller: textNote,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 3),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        labelText: "Note",
+                        labelStyle: TextStyle(fontSize: 20),
+                        hintStyle: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 70,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -160,7 +267,9 @@ class _MeScreenState extends State<ManagerProfile> {
                     padding: EdgeInsets.symmetric(horizontal: 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text('CANCEL',
                         style: TextStyle(
                             fontSize: 14,
@@ -168,18 +277,21 @@ class _MeScreenState extends State<ManagerProfile> {
                             color: Colors.black)),
                   ),
                   RaisedButton(
-                      onPressed: () {},
-                      color: Colors.amber[800],
-                      padding: EdgeInsets.symmetric(horizontal: 50),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Text(
-                        'SAVE',
-                        style: TextStyle(
-                            fontSize: 14,
-                            letterSpacing: 2.2,
-                            color: Colors.white),
-                      ))
+                    onPressed: () {
+                      setProfile();
+                    },
+                    color: Colors.amber[800],
+                    padding: EdgeInsets.symmetric(horizontal: 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Text(
+                      'SAVE',
+                      style: TextStyle(
+                          fontSize: 14,
+                          letterSpacing: 2.2,
+                          color: Colors.white),
+                    ),
+                  )
                 ],
               ),
               SizedBox(
@@ -198,22 +310,10 @@ class _MeScreenState extends State<ManagerProfile> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 35.0),
       child: TextField(
+        controller: textName,
         maxLength: maxLength,
         obscureText: isPasswordTextField ? showPassword : false,
         decoration: InputDecoration(
-          suffixIcon: isPasswordTextField
-              ? IconButton(
-                  onPressed: () {
-                    setState(() {
-                      showPassword = !showPassword;
-                    });
-                  },
-                  icon: Icon(
-                    Icons.remove_red_eye,
-                    color: Colors.grey,
-                  ),
-                )
-              : null,
           contentPadding: EdgeInsets.only(bottom: 3),
           floatingLabelBehavior: FloatingLabelBehavior.always,
           labelText: labelText,
