@@ -20,23 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a6734dd-5c79-4e7c-8f8e-5029ed0f916b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/xml/network_security_config.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/AppDelegate.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/config.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/addCamera.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/addCamera.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/giftPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/giftPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/homePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/homePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/inboxPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/inboxPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/loginPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/loginPage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/mapPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/mapPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/mePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/mePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/registerPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/registerPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +42,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sandbox/sandbox1" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../new one/viewgoalApp" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RunManager">
@@ -88,6 +74,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="596" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614926637691">
@@ -98,26 +85,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="871" y="323" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1614926635165" />
-    <state x="977" y="284" key="FileChooserDialogImpl" timestamp="1614953695441">
+    <state x="977" y="284" key="FileChooserDialogImpl" timestamp="1614962441024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="977" y="284" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1614953695441" />
-    <state width="1340" height="201" key="GridCell.Tab.0.bottom" timestamp="1614958124094">
+    <state x="977" y="284" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1614962441024" />
+    <state width="1877" height="186" key="GridCell.Tab.0.bottom" timestamp="1614963024675">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1340" height="201" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1614958124094" />
-    <state width="1340" height="201" key="GridCell.Tab.0.center" timestamp="1614958124094">
+    <state width="1877" height="186" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1614963024675" />
+    <state width="1877" height="186" key="GridCell.Tab.0.center" timestamp="1614963024675">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1340" height="201" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1614958124094" />
-    <state width="1340" height="201" key="GridCell.Tab.0.left" timestamp="1614958124093">
+    <state width="1877" height="186" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1614963024675" />
+    <state width="1877" height="186" key="GridCell.Tab.0.left" timestamp="1614963024675">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1340" height="201" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1614958124093" />
-    <state width="1340" height="201" key="GridCell.Tab.0.right" timestamp="1614958124094">
+    <state width="1877" height="186" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1614963024675" />
+    <state width="1877" height="186" key="GridCell.Tab.0.right" timestamp="1614963024675">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1340" height="201" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1614958124094" />
+    <state width="1877" height="186" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1614963024675" />
+    <state x="797" y="222" key="RollbackChangesDialog" timestamp="1614962092098">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="797" y="222" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1614962092098" />
     <state x="918" y="297" key="run.anything.popup" timestamp="1614958113460">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

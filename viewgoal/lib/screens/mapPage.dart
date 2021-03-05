@@ -103,7 +103,7 @@ class _MapPageState extends State<MapPage> {
             bottom: 105,
             child: RawMaterialButton(
               onPressed: () {
-                // _goToMe();
+                _goToMe();
               },
               elevation: 0,
 
@@ -132,30 +132,30 @@ class _MapPageState extends State<MapPage> {
   //   print(lastPosition);
   // }
 
-  // Future<LocationData> getCurrentLocation() async {
-  //   Location location = Location();
-  //   try {
-  //     return await location.getLocation();
-  //   } on PlatformException catch (e) {
-  //     if (e.code == 'PERMISSION_DENIED') {
-  //       // Permission denied
-  //     }
-  //     return null;
-  //   }
-  // }
+  Future<LocationData> getCurrentLocation() async {
+    Location location = Location();
+    try {
+      return await location.getLocation();
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        // Permission denied
+      }
+      return null;
+    }
+  }
 
-  // Future _goToMe() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   currentLocation = await getCurrentLocation();
-  //   controller.animateCamera(
-  //     CameraUpdate.newCameraPosition(
-  //       CameraPosition(
-  //         target: LatLng(currentLocation.latitude, currentLocation.longitude),
-  //         zoom: 16,
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future _goToMe() async {
+    final GoogleMapController controller = await _controller.future;
+    currentLocation = await getCurrentLocation();
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(currentLocation.latitude, currentLocation.longitude),
+          zoom: 16,
+        ),
+      ),
+    );
+  }
 
   Widget _googleMap(BuildContext context) {
     return Container(
