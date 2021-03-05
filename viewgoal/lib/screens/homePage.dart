@@ -25,21 +25,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  int slogin;
-  int user_id;
 
-  Future<void> ch() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
-      listplaying(user_id.toString());
-    }
-  }
+
+
+  // Future<void> ch() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   slogin = await prefs.get('login');
+  //   if (slogin != 1) {
+  //     Navigator.of(context).pushAndRemoveUntil(
+  //         MaterialPageRoute(builder: (context) => LoginPage()),
+  //         (Route<dynamic> route) => false);
+  //   } else if (slogin == 1) {
+  //     user_id = prefs.get('user_id');
+  //     listplaying(user_id.toString());
+  //   }
+  // }
 
   Future<void> listplaying(id) async {
     var request =
@@ -60,37 +60,296 @@ class _MyHomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
-    ch();
+    // ch();
     //print(chLogin);
   }
 
-  int _selectedIndex = 0;
-  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
+  int _currentIndex = 0;
 
-  void _onItemTapped(int index) {
+  List<Widget> _widgetOptions = <Widget>[
+    Home(),
+    MapPage(),
+    InboxPage(),
+    GiftPage(),
+    MePage(),
+  ];
+
+  void _onItemTap(int index) {
     setState(() {
-      _selectedIndex = index;
-
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-          (Route<dynamic> route) => false);
+      _currentIndex = index;
     });
   }
 
-  String asd;
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // bottomNavigationBar: BottomNavigationBar(
+      //   type: BottomNavigationBarType.fixed,
+      //   items: menuBar,
+      //   currentIndex: _currentIndex,
+      //   selectedItemColor: Colors.amber[800],
+      //   onTap: _onItemTap,
+      // ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.transparent,
+      //   elevation: 0.0,
+      //   title: TabBar(
+      //     tabs: [
+      //       Tab(
+      //         child: Text(
+      //           "Hot",
+      //           style: TextStyle(color: Color(0xFFF1771A)),
+      //         ),
+      //       ),
+      //       Tab(
+      //         child: Text(
+      //           "Favorite",
+      //           style: TextStyle(color: Color(0xFFF1771A)),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      //   actions: [
+      //     FlatButton(onPressed: () {}, child: Icon(Icons.search_rounded))
+      //   ],
+      // ),
+      // body: TabBarView(
+      //   children: [
+      //     Container(
+      //       child: ListView.builder(
+      //         itemCount: cJson.length,
+      //         itemBuilder: (context, index) {
+      //           return FlatButton(
+      //             onPressed: () {
+      //               Navigator.push(
+      //                 context,
+      //                 MaterialPageRoute(
+      //                     builder: (context) =>
+      //                         PlayPage(idcam: cJson[index]["_id"])),
+      //               );
+      //             },
+      //             child: Card(
+      //               margin: EdgeInsets.only(top: 10),
+      //               child: Container(
+      //                 width: double.infinity,
+      //                 child: Column(
+      //                   children: [
+      //                     Container(
+      //                       width: double.infinity,
+      //                       height: 200,
+      //                       color: Color(0xFFF1771A),
+      //                       child: Icon(
+      //                         Icons.play_circle_outline_outlined,
+      //                         color: Colors.white,
+      //                         size: 150,
+      //                       ),
+      //                     ),
+      //                     Container(
+      //                       child: Row(
+      //                         children: [
+      //                           ClipRRect(
+      //                             borderRadius: BorderRadius.circular(50.00),
+      //                             child: Image.network(
+      //                               hostname +
+      //                                   "/images-profile/" +
+      //                                   cJson[index]["user_id"].toString() +
+      //                                   ".png",
+      //                               width: 40,
+      //                             ),
+      //                           ),
+      //                           Container(
+      //                             margin: EdgeInsets.only(left: 10),
+      //                             child: Column(
+      //                               crossAxisAlignment:
+      //                                   CrossAxisAlignment.start,
+      //                               children: [
+      //                                 Container(
+      //                                   margin: EdgeInsets.only(top: 3),
+      //                                   child: Text("title: " +
+      //                                       cJson[index]['title']),
+      //                                 ),
+      //                                 Container(
+      //                                   margin: EdgeInsets.only(top: 3),
+      //                                   child: Text("city: " +
+      //                                       cJson[index]['location']['name']),
+      //                                 ),
+      //                                 Container(
+      //                                   margin: EdgeInsets.only(top: 5),
+      //                                   child: Row(
+      //                                     children: [
+      //                                       Text(
+      //                                           'view ${cJson[index]['view']}'),
+      //                                       Container(
+      //                                         margin:
+      //                                             EdgeInsets.only(left: 50),
+      //                                         child: Row(
+      //                                           children: [
+      //                                             Icon(Icons.favorite),
+      //                                             Text(
+      //                                                 '${cJson[index]['like']}')
+      //                                           ],
+      //                                         ),
+      //                                       ),
+      //                                     ],
+      //                                   ),
+      //                                 ),
+      //                               ],
+      //                             ),
+      //                           )
+      //                         ],
+      //                       ),
+      //                     )
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       ),
+      //     ),
+      //     Container(
+      //       child: ListView.builder(
+      //         itemCount: cJsonF.length,
+      //         itemBuilder: (context, index) {
+      //           return FlatButton(
+      //             onPressed: () {
+      //               Navigator.push(
+      //                 context,
+      //                 MaterialPageRoute(
+      //                     builder: (context) =>
+      //                         PlayPage(idcam: cJsonF[index]["_id"])),
+      //               );
+      //             },
+      //             child: Card(
+      //               margin: EdgeInsets.only(top: 10),
+      //               child: Container(
+      //                 width: double.infinity,
+      //                 child: Column(
+      //                   children: [
+      //                     Container(
+      //                       width: double.infinity,
+      //                       height: 200,
+      //                       color: Color(0xFFF1771A),
+      //                       child: Icon(
+      //                         Icons.play_circle_outline_outlined,
+      //                         color: Colors.white,
+      //                         size: 150,
+      //                       ),
+      //                     ),
+      //                     Container(
+      //                       child: Row(
+      //                         children: [
+      //                           ClipRRect(
+      //                             borderRadius: BorderRadius.circular(50.00),
+      //                             child: Image.network(
+      //                               hostname +
+      //                                   "/images-profile/" +
+      //                                   cJsonF[index]["user_id"].toString() +
+      //                                   ".png",
+      //                               width: 40,
+      //                             ),
+      //                           ),
+      //                           Container(
+      //                             margin: EdgeInsets.only(left: 10),
+      //                             child: Column(
+      //                               crossAxisAlignment:
+      //                                   CrossAxisAlignment.start,
+      //                               children: [
+      //                                 Container(
+      //                                   margin: EdgeInsets.only(top: 3),
+      //                                   child: Text("title: " +
+      //                                       cJsonF[index]['title']),
+      //                                 ),
+      //                                 Container(
+      //                                   margin: EdgeInsets.only(top: 3),
+      //                                   child: Text("city: " +
+      //                                       cJsonF[index]['location']
+      //                                           ['name']),
+      //                                 ),
+      //                                 Container(
+      //                                   margin: EdgeInsets.only(top: 5),
+      //                                   child: Row(
+      //                                     children: [
+      //                                       Text(
+      //                                           'view ${cJsonF[index]['view']}'),
+      //                                       Container(
+      //                                         margin:
+      //                                             EdgeInsets.only(left: 50),
+      //                                         child: Row(
+      //                                           children: [
+      //                                             Icon(Icons.favorite),
+      //                                             Text(
+      //                                                 '${cJsonF[index]['like']}')
+      //                                           ],
+      //                                         ),
+      //                                       ),
+      //                                     ],
+      //                                   ),
+      //                                 ),
+      //                               ],
+      //                             ),
+      //                           )
+      //                         ],
+      //                       ),
+      //                     )
+      //                   ],
+      //                 ),
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // ),
+      body: Center(
+        child: _widgetOptions.elementAt(_currentIndex),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.amber[800],
+        iconSize: 30,
+        currentIndex: _currentIndex,
+        onTap: _onItemTap,
+        items: const <BottomNavigationBarItem> [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: "Map",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inbox),
+            label: "Inbox",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.card_giftcard),
+            label: "Gift",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: "Me",
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: menuBar,
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          onTap: _onItemTapped,
-        ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -162,7 +421,7 @@ class _MyHomePageState extends State<HomePage> {
                                     margin: EdgeInsets.only(left: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
@@ -182,7 +441,7 @@ class _MyHomePageState extends State<HomePage> {
                                                   'view ${cJson[index]['view']}'),
                                               Container(
                                                 margin:
-                                                    EdgeInsets.only(left: 50),
+                                                EdgeInsets.only(left: 50),
                                                 child: Row(
                                                   children: [
                                                     Icon(Icons.favorite),
@@ -254,7 +513,7 @@ class _MyHomePageState extends State<HomePage> {
                                     margin: EdgeInsets.only(left: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
@@ -265,7 +524,7 @@ class _MyHomePageState extends State<HomePage> {
                                           margin: EdgeInsets.only(top: 3),
                                           child: Text("city: " +
                                               cJsonF[index]['location']
-                                                  ['name']),
+                                              ['name']),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 5),
@@ -275,7 +534,7 @@ class _MyHomePageState extends State<HomePage> {
                                                   'view ${cJsonF[index]['view']}'),
                                               Container(
                                                 margin:
-                                                    EdgeInsets.only(left: 50),
+                                                EdgeInsets.only(left: 50),
                                                 child: Row(
                                                   children: [
                                                     Icon(Icons.favorite),

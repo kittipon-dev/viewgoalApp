@@ -27,18 +27,6 @@ class MePage extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MePage> {
-  int _selectedIndex = 4;
-  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-          (Route<dynamic> route) => false);
-    });
-  }
-
   String dropdownValue = 'One';
 
   int slogin;
@@ -77,9 +65,7 @@ class _MyStatefulWidgetState extends State<MePage> {
       cJson = await list[1];
        */
       img = NetworkImage(hostname + '/images-profile/${id}.png');
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 
@@ -154,13 +140,6 @@ class _MyStatefulWidgetState extends State<MePage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: menuBar,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -174,7 +153,10 @@ class _MyStatefulWidgetState extends State<MePage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ManagerProfile(user_id: username,myme: myME,),
+                            builder: (context) => ManagerProfile(
+                              user_id: username,
+                              myme: myME,
+                            ),
                           ),
                         );
                       },
@@ -234,7 +216,8 @@ class _MyStatefulWidgetState extends State<MePage> {
                   ),
                 ],
               ),
-            ),SizedBox(
+            ),
+            SizedBox(
               height: 20,
             ),
             Container(
@@ -281,23 +264,35 @@ class _MyStatefulWidgetState extends State<MePage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    child: OutlineButton(
+                                    child: OutlinedButton(
                                       onPressed: () {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => addCameraPage(
+                                            builder: (context) => AddCameraPage(
                                                 id: username.toString()),
                                           ),
                                         );
                                       },
                                       child: Text("Add Camera"),
-                                      shape: RoundedRectangleBorder(
+                                      // shape: RoundedRectangleBorder(
+                                      //   side: BorderSide(
+                                      //       color: Colors.blue,
+                                      //       width: 10,
+                                      //       style: BorderStyle.solid),
+                                      //   borderRadius: BorderRadius.circular(50),
+
+                                      // ),
+                                      style: OutlinedButton.styleFrom(
                                         side: BorderSide(
                                             color: Colors.blue,
                                             width: 10,
                                             style: BorderStyle.solid),
-                                        borderRadius: BorderRadius.circular(50),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(50),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

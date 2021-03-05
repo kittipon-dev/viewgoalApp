@@ -1,1 +1,1 @@
-final String hostname = "http://192.168.2.14:2311";
+final String hostname = "https://18.140.255.41:2311";

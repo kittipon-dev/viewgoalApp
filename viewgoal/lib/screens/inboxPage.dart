@@ -43,31 +43,12 @@ class _MyHomePageState extends State<InboxPage> {
     ch();
   }
 
-  int _selectedIndex = 2;
-  final page = [HomePage(), MapPage(), InboxPage(),GiftPage(), MePage()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-              (Route<dynamic> route) => false);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: menuBar,
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          onTap: _onItemTapped,
-        ),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0.0,

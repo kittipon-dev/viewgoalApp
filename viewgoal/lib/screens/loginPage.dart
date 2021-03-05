@@ -42,7 +42,7 @@ class _MyHomePageState extends State<LoginPage> {
 
   Future<void> login() async {
     final http.Response response = await http.post(
-      hostname + '/login',
+      Uri.parse(hostname + '/login'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -179,7 +179,7 @@ class _MyHomePageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => registerPage()),
+                              builder: (context) => RegisterPage()),
                         );
                       },
                       shape: RoundedRectangleBorder(
