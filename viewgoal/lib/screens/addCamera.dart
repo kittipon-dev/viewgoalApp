@@ -7,8 +7,8 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:viewgoal/config.dart';
 import 'package:viewgoal/screens/mePage.dart';
 
-class addCameraPage extends StatefulWidget {
-  addCameraPage({Key key, this.id}) : super(key: key);
+class AddCameraPage extends StatefulWidget {
+  AddCameraPage({Key key, this.id}) : super(key: key);
 
   final String id;
 
@@ -16,7 +16,7 @@ class addCameraPage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<addCameraPage> {
+class _MyHomePageState extends State<AddCameraPage> {
   final _formAdd = GlobalKey<FormState>();
 
   /*
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<addCameraPage> {
   Future<void> _save() async {
     if (_formAdd.currentState.validate()) {
       final http.Response response = await http.post(
-        hostname + '/addcamera',
+        Uri.parse(hostname + '/addcamera'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

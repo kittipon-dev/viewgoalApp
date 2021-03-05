@@ -7,8 +7,8 @@ import 'package:viewgoal/config.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 
 
-class registerPage extends StatefulWidget {
-  registerPage({Key key, this.title}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key key, this.title}) : super(key: key);
 
   final String title;
 
@@ -16,7 +16,7 @@ class registerPage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<registerPage> {
+class _MyHomePageState extends State<RegisterPage> {
   String birthday;
 
   final _formKey = GlobalKey<FormState>();
@@ -32,7 +32,7 @@ class _MyHomePageState extends State<registerPage> {
     if (_formKey.currentState.validate()) {
       if (password.text == trypassword.text) {
         final http.Response response = await http.post(
-          hostname + '/register',
+          Uri.parse(hostname + '/register'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
@@ -146,7 +146,7 @@ class _MyHomePageState extends State<registerPage> {
                     color: Color(0xFFF1771A),
                     onPressed: () => register(),
                     child: Text(
-                      "Sing Up",
+                      "Sign Up",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
