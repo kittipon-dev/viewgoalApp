@@ -1,11 +1,55 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:viewgoal/config.dart';
+import 'package:http/http.dart' as http;
+import 'package:viewgoal/screens/loginPage.dart';
 
 class TopUp extends StatefulWidget {
   @override
   _TopUpState createState() => _TopUpState();
 }
 
+var cJson = {};
+
 class _TopUpState extends State<TopUp> {
+
+  int user_id;
+
+  Future<void> ch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id = await prefs.get('user_id');
+    if (user_id > 0) {
+
+    } else {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+              (Route<dynamic> route) => false);
+    }
+  }
+
+  Future<void> top_up(price) async {
+    var request = await http.Request(
+        'GET',
+        Uri.parse(hostname +
+            '/top_up?user_id=' +
+            user_id.toString() +
+            '&price=' +
+            price.toString()));
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ch();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +73,9 @@ class _TopUpState extends State<TopUp> {
       body: Column(
         children: [
           ListTile(
+            onTap: () {
+              top_up(10);
+            },
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               '1 วัน',
@@ -50,6 +97,9 @@ class _TopUpState extends State<TopUp> {
             thickness: 2,
           ),
           ListTile(
+            onTap: () {
+              top_up(100);
+            },
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               '1 สัปดาห์',
@@ -69,6 +119,9 @@ class _TopUpState extends State<TopUp> {
           ),
           Divider(thickness: 2),
           ListTile(
+            onTap: () {
+              top_up(100);
+            },
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               '1 เดือน',
@@ -88,6 +141,9 @@ class _TopUpState extends State<TopUp> {
           ),
           Divider(thickness: 2),
           ListTile(
+            onTap: () {
+              top_up(8000);
+            },
             visualDensity: VisualDensity(horizontal: 0, vertical: -3),
             title: Text(
               '1 ปี',

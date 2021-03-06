@@ -32,7 +32,6 @@ class SettingsPage extends StatefulWidget {
 class _SettingsState extends State<SettingsPage> {
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('login', 0);
     prefs.setInt('user_id', 0);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (context) => LoginPage()),

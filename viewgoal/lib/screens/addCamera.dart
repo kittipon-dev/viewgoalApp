@@ -62,12 +62,7 @@ class _MyHomePageState extends State<AddCameraPage> {
       );
 
       if (response.statusCode == 200) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MePage(),
-          ),
-        );
+        Navigator.pop(context);
       }
     }
   }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,20 +15,23 @@ import 'package:viewgoal/screens/userPage.dart';
 
 import 'giftPage.dart';
 
+var cJson = {};
+var list = [];
+var listF = [];
+var listLike = [];
+String urlimgprofile = hostname + '/images-profile/null.png';
+
 /// This is the stateful widget that the main application instantiates.
-class CommentPage extends StatefulWidget {
-  CommentPage({Key key, this.idcam, this.cComment}) : super(key: key);
+class MessagePage extends StatefulWidget {
+  MessagePage({Key key, this.idcam}) : super(key: key);
   String idcam;
-  var cComment = [];
 
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
-var cComment = [];
-
 /// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<CommentPage> {
+class _MyStatefulWidgetState extends State<MessagePage> {
   int slogin;
   int user_id;
 
@@ -37,8 +39,6 @@ class _MyStatefulWidgetState extends State<CommentPage> {
   bool l = false;
 
   final txtpost = TextEditingController();
-
-  var img = NetworkImage(hostname + '/images-profile/null.png');
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -48,35 +48,28 @@ class _MyStatefulWidgetState extends State<CommentPage> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
-          (Route<dynamic> route) => false);
+              (Route<dynamic> route) => false);
     }
   }
+
+  Future<void> initializePlayer() async {}
 
   Future<void> getComment(id) async {
     var request = await http.Request(
-        'GET', Uri.parse(hostname + '/get_comment?idcam=' + id));
+        'GET',
+        Uri.parse(hostname +
+            '/comment?_id=' +
+            id +
+            '&user_id=' +
+            user_id.toString()));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
-      cComment = jsonDecode(receivedJson);
-      setState(() {});
-    }
-  }
-
-  Future<void> PostComment() async {
-    var request = await http.Request(
-        'POST',
-        Uri.parse(hostname +
-            '/postcomment?user_id=' +
-            user_id.toString() +
-            '&idcam=' +
-            widget.idcam +
-            '&commentTxt=' +
-            txtpost.text));
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      getComment(widget.idcam);
-      txtpost.clear();
+      cJson = jsonDecode(receivedJson);
+      /*
+      urlimgprofile = hostname + '/images-profile/${cJson["user_id"]}.png';
+      listplaying(user_id.toString());
+       */
     }
   }
 
@@ -84,13 +77,31 @@ class _MyStatefulWidgetState extends State<CommentPage> {
   void initState() {
     super.initState();
     ch();
-    getComment(widget.idcam);
+  }
+
+  int _selectedIndex = 0;
+  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
+          (Route<dynamic> route) => false);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: menuBar,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.black54,
+        onTap: _onItemTapped,
+      ),
       appBar: AppBar(
         leading: FlatButton(
           onPressed: () {
@@ -109,7 +120,7 @@ class _MyStatefulWidgetState extends State<CommentPage> {
           children: [
             Container(
               padding:
-                  EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+              EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -122,9 +133,9 @@ class _MyStatefulWidgetState extends State<CommentPage> {
                   ),
                   RaisedButton(
                     onPressed: () {
-                      PostComment();
+
                     },
-                    child: Text("Post"),
+                    child: Text("Send"),
                   )
                 ],
               ),
@@ -133,7 +144,7 @@ class _MyStatefulWidgetState extends State<CommentPage> {
               child: Container(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: ListView.builder(
-                  itemCount: cComment.length,
+                  itemCount: 10,
                   itemBuilder: (context, index) {
                     return Container(
                       child: Card(
@@ -141,21 +152,9 @@ class _MyStatefulWidgetState extends State<CommentPage> {
                           children: [
                             CircleAvatar(
                               backgroundImage: NetworkImage(hostname +
-                                  '/images-profile/${cComment[index]["user_id"]}.png'),
-                              child: FlatButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserPage(
-                                              userid: cComment[index]["user_id"]
-                                                  .toString(),
-                                            )),
-                                  );
-                                },
-                              ),
+                                  '/images-profile/null.png'),
                             ),
-                            Text(cComment[index]["comment"])
+                            Text("Test")
                           ],
                         ),
                       ),
