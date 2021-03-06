@@ -25,21 +25,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
+  int slogin;
+  int user_id;
 
-
-
-  // Future<void> ch() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   slogin = await prefs.get('login');
-  //   if (slogin != 1) {
-  //     Navigator.of(context).pushAndRemoveUntil(
-  //         MaterialPageRoute(builder: (context) => LoginPage()),
-  //         (Route<dynamic> route) => false);
-  //   } else if (slogin == 1) {
-  //     user_id = prefs.get('user_id');
-  //     listplaying(user_id.toString());
-  //   }
-  // }
+  Future<void> ch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    slogin = await prefs.get('login');
+    if (slogin != 1) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (Route<dynamic> route) => false);
+    } else if (slogin == 1) {
+      user_id = prefs.get('user_id');
+      listplaying(user_id.toString());
+    }
+  }
 
   Future<void> listplaying(id) async {
     var request =
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
-    // ch();
+    ch();
     //print(chLogin);
   }
 
@@ -79,7 +79,6 @@ class _MyHomePageState extends State<HomePage> {
       _currentIndex = index;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +302,7 @@ class _MyHomePageState extends State<HomePage> {
       //     ),
       //   ],
       // ),
-      body: Center(
+      body: Container(
         child: _widgetOptions.elementAt(_currentIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -312,7 +311,7 @@ class _MyHomePageState extends State<HomePage> {
         iconSize: 30,
         currentIndex: _currentIndex,
         onTap: _onItemTap,
-        items: const <BottomNavigationBarItem> [
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Home",
@@ -363,7 +362,7 @@ class _HomeState extends State<Home> {
               ),
               Tab(
                 child: Text(
-                  "Favorite",
+                  "Save",
                   style: TextStyle(color: Color(0xFFF1771A)),
                 ),
               ),
@@ -421,7 +420,7 @@ class _HomeState extends State<Home> {
                                     margin: EdgeInsets.only(left: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
@@ -441,7 +440,7 @@ class _HomeState extends State<Home> {
                                                   'view ${cJson[index]['view']}'),
                                               Container(
                                                 margin:
-                                                EdgeInsets.only(left: 50),
+                                                    EdgeInsets.only(left: 50),
                                                 child: Row(
                                                   children: [
                                                     Icon(Icons.favorite),
@@ -513,7 +512,7 @@ class _HomeState extends State<Home> {
                                     margin: EdgeInsets.only(left: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
@@ -524,7 +523,7 @@ class _HomeState extends State<Home> {
                                           margin: EdgeInsets.only(top: 3),
                                           child: Text("city: " +
                                               cJsonF[index]['location']
-                                              ['name']),
+                                                  ['name']),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 5),
@@ -534,7 +533,7 @@ class _HomeState extends State<Home> {
                                                   'view ${cJsonF[index]['view']}'),
                                               Container(
                                                 margin:
-                                                EdgeInsets.only(left: 50),
+                                                    EdgeInsets.only(left: 50),
                                                 child: Row(
                                                   children: [
                                                     Icon(Icons.favorite),

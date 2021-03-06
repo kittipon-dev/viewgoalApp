@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/screens/loginPage.dart';
+import 'package:viewgoal/screens/playPage.dart';
 import 'package:viewgoal/screens/settingsPage.dart';
 import 'package:viewgoal/settings/Account/manage_profile.dart';
 
@@ -59,7 +60,7 @@ class _MyStatefulWidgetState extends State<MePage> {
       req = jsonDecode(receivedJson);
       myME = req["user"];
       cJson = req["camera"];
-      // print(json["user_id"]);
+      print(myME);
 /*
       list = await json.decode(receivedJson);
       cJson = await list[1];
@@ -182,17 +183,6 @@ class _MyStatefulWidgetState extends State<MePage> {
                           width: 100,
                           child: Column(
                             children: [
-                              Text(myME["following"] == null
-                                  ? myME["following"].toString()
-                                  : '0'),
-                              Text("กําลังติดตาม")
-                            ],
-                          ),
-                        ),
-                        Container(
-                          width: 100,
-                          child: Column(
-                            children: [
                               Text(myME["followers"] == null
                                   ? myME["followers"].toString()
                                   : '0'),
@@ -237,7 +227,7 @@ class _MyStatefulWidgetState extends State<MePage> {
             ),
             Expanded(
               child: DefaultTabController(
-                length: 2,
+                length: 4,
                 child: Scaffold(
                   body: Column(
                     children: [
@@ -251,7 +241,19 @@ class _MyStatefulWidgetState extends State<MePage> {
                           ),
                           Tab(
                             child: Text(
+                              "Save",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
                               "Record",
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              "Following",
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -304,101 +306,115 @@ class _MyStatefulWidgetState extends State<MePage> {
                                           return FlatButton(
                                             child: Container(
                                               child: Card(
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      width: 150,
-                                                      height: 100,
-                                                      color: Color(0xFFF1771A),
-                                                      child: Icon(
-                                                        Icons
-                                                            .play_circle_outline_outlined,
-                                                        color: Colors.white,
-                                                        size: 50,
+                                                child: FlatButton(
+                                                  onPressed: (){
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PlayPage(idcam: cJson[index]["_id"])),
+                                                    );
+                                                  },
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Container(
+                                                        width: 150,
+                                                        height: 100,
+                                                        color:
+                                                            Color(0xFFF1771A),
+                                                        child: Icon(
+                                                          Icons
+                                                              .play_circle_outline_outlined,
+                                                          color: Colors.white,
+                                                          size: 50,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      width: 100,
-                                                      height: 100,
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround,
-                                                        children: [
-                                                          Container(
-                                                            child: Text(
-                                                                '${cJson[index]['title']}'),
-                                                          ),
-                                                          /*
+                                                      Container(
+                                                        width: 100,
+                                                        height: 100,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceAround,
+                                                          children: [
+                                                            Container(
+                                                              child: Text(
+                                                                  '${cJson[index]['title']}'),
+                                                            ),
+                                                            /*
                                                           Container(
                                                             child: Text(cJson[0]['loaction']['name']??''),
                                                           ),
                                                            */
-                                                          Container(
-                                                            padding:
-                                                                EdgeInsets.all(
-                                                                    1),
-                                                            child: Text(
-                                                              cJson[index][
-                                                                          'status'] ==
-                                                                      true
-                                                                  ? 'playing...'
-                                                                  : 'stop',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black45),
+                                                            Container(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .all(1),
+                                                              child: Text(
+                                                                cJson[index][
+                                                                            'status'] ==
+                                                                        true
+                                                                    ? 'playing...'
+                                                                    : 'stop',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black45),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Container(
-                                                      child: PopupMenuButton(
-                                                        onSelected: (result) {
-                                                          print(result);
-                                                          if (result == 1) {
-                                                            startcam(
-                                                                cJson[index]
-                                                                    ["_id"]);
-                                                          } else if (result ==
-                                                              2) {
-                                                            stopcam(cJson[index]
-                                                                ["_id"]);
-                                                          } else if (result ==
-                                                              3) {
-                                                            removedcam(
-                                                                cJson[index]
-                                                                    ["_id"]);
-                                                          }
-                                                        },
-                                                        itemBuilder:
-                                                            (context) => [
-                                                          PopupMenuItem(
-                                                            value: 1,
-                                                            child:
-                                                                Text("Start"),
-                                                          ),
-                                                          PopupMenuItem(
-                                                            value: 2,
-                                                            child: Text("Stop"),
-                                                          ),
-                                                          PopupMenuItem(
-                                                            value: 3,
-                                                            child:
-                                                                Text("Removed"),
-                                                          ),
-                                                        ],
+                                                      Container(
+                                                        child: PopupMenuButton(
+                                                          onSelected: (result) {
+                                                            print(result);
+                                                            if (result == 1) {
+                                                              startcam(
+                                                                  cJson[index]
+                                                                      ["_id"]);
+                                                            } else if (result ==
+                                                                2) {
+                                                              stopcam(
+                                                                  cJson[index]
+                                                                      ["_id"]);
+                                                            } else if (result ==
+                                                                3) {
+                                                              removedcam(
+                                                                  cJson[index]
+                                                                      ["_id"]);
+                                                            }
+                                                          },
+                                                          itemBuilder:
+                                                              (context) => [
+                                                            PopupMenuItem(
+                                                              value: 1,
+                                                              child:
+                                                                  Text("Start"),
+                                                            ),
+                                                            PopupMenuItem(
+                                                              value: 2,
+                                                              child:
+                                                                  Text("Stop"),
+                                                            ),
+                                                            PopupMenuItem(
+                                                              value: 3,
+                                                              child: Text(
+                                                                  "Removed"),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -408,6 +424,107 @@ class _MyStatefulWidgetState extends State<MePage> {
                                     ),
                                   ),
                                 ],
+                              ),
+                            ),
+                            Container(
+                              child: ListView.builder(
+                                itemCount: myME["favorite"].length,
+                                itemBuilder: (context, index) {
+                                  return FlatButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => PlayPage(
+                                                idcam: myME["favorite"]
+                                                    [index])),
+                                      );
+                                    },
+                                    child: Container(
+                                      child: Card(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 150,
+                                              height: 100,
+                                              color: Color(0xFFF1771A),
+                                              child: Icon(
+                                                Icons
+                                                    .play_circle_outline_outlined,
+                                                color: Colors.white,
+                                                size: 50,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    child: Text(myME["favorite"]
+                                                        [index]),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 10),
+                                                    child: Text(''),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            Container(
+                              child: ListView.builder(
+                                itemCount: 0,
+                                itemBuilder: (context, index) {
+                                  return FlatButton(
+                                    onPressed: () {},
+                                    child: Container(
+                                      child: Card(
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 150,
+                                              height: 100,
+                                              color: Color(0xFFF1771A),
+                                              child: Icon(
+                                                Icons
+                                                    .play_circle_outline_outlined,
+                                                color: Colors.white,
+                                                size: 50,
+                                              ),
+                                            ),
+                                            Container(
+                                              margin: EdgeInsets.only(left: 10),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    child: Text(''),
+                                                  ),
+                                                  Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 10),
+                                                    child: Text(''),
+                                                  ),
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
                             Container(

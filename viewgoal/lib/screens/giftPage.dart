@@ -15,7 +15,7 @@ import '../menu_bar.dart';
 import 'homePage.dart';
 
 var cJson = [];
-var cJsonF = [];
+var cUser = {};
 
 class GiftPage extends StatefulWidget {
   GiftPage({Key key}) : super(key: key);
@@ -38,6 +38,20 @@ class _MyHomePageState extends State<GiftPage> {
     } else if (slogin == 1) {
       user_id = prefs.get('user_id');
       listplaying(user_id.toString());
+      get_point(user_id.toString());
+    }
+  }
+
+  Future<void> get_point(id) async {
+    var request =
+        http.Request('GET', Uri.parse(hostname + '/get_point?user_id=' + id));
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String receivedJson = await response.stream.bytesToString();
+      cUser = jsonDecode(receivedJson);
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
     }
   }
 
@@ -85,7 +99,7 @@ class _MyHomePageState extends State<GiftPage> {
               ),
             ],
           ),
-          actions: [FlatButton(onPressed: () {}, child: Text("0 P"))],
+          actions: [FlatButton(onPressed: () {}, child: Text(cUser["point"].toString()))],
         ),
         body: TabBarView(
           children: [

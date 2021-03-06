@@ -1,12 +1,59 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:viewgoal/config.dart';
+import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/settings/Account/top_up.dart';
+import 'package:http/http.dart' as http;
 
 class Balance extends StatefulWidget {
   @override
   _BalanceState createState() => _BalanceState();
 }
 
+var cUser = {};
+
 class _BalanceState extends State<Balance> {
+
+  int slogin;
+  int user_id;
+
+  Future<void> ch() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    slogin = await prefs.get('login');
+    if (slogin != 1) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+              (Route<dynamic> route) => false);
+    } else if (slogin == 1) {
+      user_id = prefs.get('user_id');
+      get_point(user_id.toString());
+    }
+  }
+
+
+  Future<void> get_point(id) async {
+    var request =
+    http.Request('GET', Uri.parse(hostname + '/get_point?user_id=' + id));
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String receivedJson = await response.stream.bytesToString();
+      cUser = jsonDecode(receivedJson);
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
+    }
+  }
+
+  @override
+  initState() {
+    super.initState();
+    ch();
+    //print(chLogin);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +84,7 @@ class _BalanceState extends State<Balance> {
               children: [
                 Icon(Icons.attach_money),
                 Text(
-                  '199',
+                  cUser["point"].toString(),
                   style: TextStyle(fontSize: 20),
                 ),
                 Spacer(),

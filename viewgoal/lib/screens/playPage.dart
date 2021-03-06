@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
@@ -17,12 +16,11 @@ import 'package:viewgoal/screens/userPage.dart';
 
 import 'giftPage.dart';
 
-
-
 var cJson = {};
 var list = [];
 var listF = [];
 var listLike = [];
+var cComment = [];
 String urlimgprofile = hostname + '/images-profile/null.png';
 
 /// This is the stateful widget that the main application instantiates.
@@ -36,7 +34,6 @@ class PlayPage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<PlayPage> {
-  VlcPlayerController _videoPlayerController;
   int slogin;
   int user_id;
 
@@ -53,10 +50,20 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     } else if (slogin == 1) {
       user_id = prefs.get('user_id');
       getPlay(widget.idcam);
+      getComment(widget.idcam);
     }
   }
 
-  Future<void> initializePlayer() async {}
+  Future<void> getComment(id) async {
+    var request = await http.Request(
+        'GET', Uri.parse(hostname + '/get_comment?idcam=' + id));
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String receivedJson = await response.stream.bytesToString();
+      cComment = jsonDecode(receivedJson);
+      setState(() {});
+    }
+  }
 
   Future<void> getPlay(id) async {
     var request = await http.Request(
@@ -180,13 +187,6 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     ch();
   }
 
-  @override
-  void dispose() {
-    _videoPlayerController.stopRendererScanning();
-    _videoPlayerController.removeListener(() {});
-    super.dispose();
-  }
-
   int _selectedIndex = 0;
   final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
 
@@ -236,7 +236,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                     color: Colors.white,
                   ),
                   Text(
-                    "Favorite",
+                    "Save",
                     style: TextStyle(color: Colors.white),
                   )
                 ],
@@ -320,14 +320,15 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            CommentPage(idcam: widget.idcam)),
+                                      builder: (context) =>
+                                          CommentPage(idcam: widget.idcam,cComment: cComment,),
+                                    ),
                                   );
                                 },
                                 child: Row(
                                   children: [
                                     Icon(Icons.comment_outlined),
-                                    Text("  0")
+                                    Text(" " + cComment.length.toString())
                                   ],
                                 ),
                               ),

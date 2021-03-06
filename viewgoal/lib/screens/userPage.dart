@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
+import 'package:viewgoal/screens/messagePage.dart';
 import 'package:viewgoal/screens/playPage.dart';
 import 'package:viewgoal/screens/settingsPage.dart';
 
@@ -21,8 +22,9 @@ var myME = {};
 
 /// This is the stateful widget that the main application instantiates.
 class UserPage extends StatefulWidget {
-  UserPage({Key key,this.user_id}) : super(key: key);
+  UserPage({Key key, this.user_id}) : super(key: key);
   final String user_id;
+
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
@@ -37,7 +39,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
       _selectedIndex = index;
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     });
   }
 
@@ -80,39 +82,6 @@ class _MyStatefulWidgetState extends State<UserPage> {
     }
   }
 
-  Future<void> startcam(idcam) async {
-    var request = await http.Request(
-        'GET', Uri.parse(hostname + '/startcam?_id=' + idcam));
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      setState(() {
-        getUser(widget.user_id);
-      });
-    }
-  }
-
-  Future<void> stopcam(idcam) async {
-    var request = await http.Request(
-        'GET', Uri.parse(hostname + '/stopcam?_id=' + idcam));
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      setState(() {
-        getUser(widget.user_id);
-      });
-    }
-  }
-
-  Future<void> removedcam(idcam) async {
-    var request = await http.Request(
-        'GET', Uri.parse(hostname + '/removedcam?_id=' + idcam));
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      setState(() {
-        getUser(username.toString());
-      });
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -141,6 +110,28 @@ class _MyStatefulWidgetState extends State<UserPage> {
           ),
         ),
         actions: [
+          FlatButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MessagePage(),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.message_outlined,
+                  color: Colors.black54,
+                ),
+                Text(
+                  "Message ",
+                  style: TextStyle(color: Colors.black54),
+                )
+              ],
+            ),
+          ),
           FlatButton(
             onPressed: () {},
             child: Row(
@@ -200,17 +191,6 @@ class _MyStatefulWidgetState extends State<UserPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          width: 100,
-                          child: Column(
-                            children: [
-                              Text(myME["following"] == null
-                                  ? myME["following"].toString()
-                                  : '0'),
-                              Text("กําลังติดตาม")
-                            ],
-                          ),
-                        ),
                         Container(
                           width: 100,
                           child: Column(
