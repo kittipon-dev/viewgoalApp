@@ -1,14 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:viewgoal/menu_bar.dart';
-import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'dart:async';
-import 'package:viewgoal/screens/mapPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
-
-import 'giftPage.dart';
 
 var cJson = [];
 
@@ -22,6 +16,7 @@ class InboxPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<InboxPage> {
+
   int slogin;
 
   Future<void> ch() async {
@@ -161,7 +156,7 @@ class _MyHomePageState extends State<InboxPage> {
               ),
             ],
           ),
-        ), // This trailing comma makes auto-formatting nicer for build methods.
+        ),
       ),
     );
   }

@@ -21,7 +21,14 @@
   <component name="ChangeListManager">
     <list default="true" id="3a6734dd-5c79-4e7c-8f8e-5029ed0f916b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/loginPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/loginPage.dart" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewgoal/lib/config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/config.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/homePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/homePage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/inboxPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/inboxPage.dart" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/mapPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/mapPage.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -40,6 +47,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../new one/viewgoalApp" />
@@ -88,6 +96,7 @@
     <state x="977" y="284" key="FileChooserDialogImpl" timestamp="1614962441024">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
+<<<<<<< Updated upstream
     <state x="977" y="284" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1614962441024" />
     <state width="1877" height="186" key="GridCell.Tab.0.bottom" timestamp="1614963024675">
       <screen x="0" y="0" width="1920" height="1040" />
@@ -109,6 +118,25 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="797" y="222" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1614962092098" />
+=======
+    <state x="977" y="284" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1614953695441" />
+    <state width="938" height="218" key="GridCell.Tab.0.bottom" timestamp="1615003988435">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="218" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1615003988435" />
+    <state width="938" height="218" key="GridCell.Tab.0.center" timestamp="1615003988434">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="218" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1615003988434" />
+    <state width="938" height="218" key="GridCell.Tab.0.left" timestamp="1615003988434">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="218" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1615003988434" />
+    <state width="938" height="218" key="GridCell.Tab.0.right" timestamp="1615003988434">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="938" height="218" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1615003988434" />
+>>>>>>> Stashed changes
     <state x="918" y="297" key="run.anything.popup" timestamp="1614958113460">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
