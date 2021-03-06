@@ -42,14 +42,13 @@ class _MyStatefulWidgetState extends State<CommentPage> {
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
+    user_id = await prefs.get('user_id');
+    if (user_id != null && user_id > 0) {
+      getComment(widget.idcam.toString());
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
           (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
-      //getComment(widget.idcam);
     }
   }
 
@@ -86,18 +85,6 @@ class _MyStatefulWidgetState extends State<CommentPage> {
     super.initState();
     ch();
     getComment(widget.idcam);
-  }
-
-  int _selectedIndex = 0;
-  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-          (Route<dynamic> route) => false);
-    });
   }
 
   @override
@@ -160,8 +147,10 @@ class _MyStatefulWidgetState extends State<CommentPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            UserPage(user_id: cComment[index]["user_id"].toString(),)),
+                                        builder: (context) => UserPage(
+                                              userid: cComment[index]["user_id"]
+                                                  .toString(),
+                                            )),
                                   );
                                 },
                               ),

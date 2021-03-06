@@ -1,8 +1,12 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
+import 'package:viewgoal/screens/advertisingPage.dart';
 import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mapPage.dart';
@@ -15,6 +19,7 @@ import '../menu_bar.dart';
 import 'homePage.dart';
 
 var cJson = [];
+var cJsonF = [];
 var cUser = {};
 
 class GiftPage extends StatefulWidget {
@@ -25,20 +30,18 @@ class GiftPage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<GiftPage> {
-  int slogin;
   int user_id;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
+    user_id = await prefs.get('user_id');
+    if (user_id > 0) {
+      listplaying(user_id.toString());
+      get_point(user_id.toString());
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
           (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
-      listplaying(user_id.toString());
-      get_point(user_id.toString());
     }
   }
 
@@ -49,6 +52,8 @@ class _MyHomePageState extends State<GiftPage> {
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       cUser = jsonDecode(receivedJson);
+      cJsonF = cUser["activity"];
+      print(cJsonF);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -99,7 +104,9 @@ class _MyHomePageState extends State<GiftPage> {
               ),
             ],
           ),
-          actions: [FlatButton(onPressed: () {}, child: Text(cUser["point"].toString()))],
+          actions: [
+            FlatButton(onPressed: () {}, child: Text(cUser["point"].toString()))
+          ],
         ),
         body: TabBarView(
           children: [
@@ -108,7 +115,15 @@ class _MyHomePageState extends State<GiftPage> {
                 itemCount: cJson.length,
                 itemBuilder: (context, index) {
                   return FlatButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AdvertisingPage(cA: cJson[index]),
+                        ),
+                      );
+                    },
                     child: Card(
                       margin: EdgeInsets.only(top: 10),
                       child: Container(
@@ -116,7 +131,7 @@ class _MyHomePageState extends State<GiftPage> {
                         child: Container(
                           width: double.infinity,
                           color: Color(0xFFF1771A),
-                          child: Image.network('http://192.168.2.14:3000' +
+                          child: Image.network('http://18.140.255.41:3000' +
                               cJson[index]["urlimg"].toString()),
                         ),
                       ),
@@ -130,23 +145,31 @@ class _MyHomePageState extends State<GiftPage> {
                 itemCount: cJsonF.length,
                 itemBuilder: (context, index) {
                   return FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              PlayPage(idcam: cJsonF[index]["_id"]),
-                        ),
-                      );
-                    },
+                    onPressed: () {},
                     child: Card(
                       margin: EdgeInsets.only(top: 10),
                       child: Container(
                         width: double.infinity,
                         child: Container(
                           width: double.infinity,
-                          height: 200,
                           color: Color(0xFFF1771A),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  "Topic: " + cJsonF[index]["topic"].toString(),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Text(
+                                  "ref: " + cJsonF[index]["ref"].toString(),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

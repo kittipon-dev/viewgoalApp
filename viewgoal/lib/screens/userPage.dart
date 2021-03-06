@@ -22,8 +22,8 @@ var myME = {};
 
 /// This is the stateful widget that the main application instantiates.
 class UserPage extends StatefulWidget {
-  UserPage({Key key, this.user_id}) : super(key: key);
-  final String user_id;
+  UserPage({Key key, this.userid}) : super(key: key);
+  final String userid;
 
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
@@ -31,34 +31,25 @@ class UserPage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<UserPage> {
-  int _selectedIndex = 3;
-  final page = [HomePage(), MapPage(), InboxPage(), MePage()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-          (Route<dynamic> route) => false);
-    });
-  }
-
   int slogin;
-  int username;
+  int user_id;
   String urlimgprofile = hostname + '/images-profile/null.png';
+
+  int likeme = 0;
+  int followers = 0;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
+    user_id = await prefs.get('user_id');
+    if (user_id > 0) {
+      getUser(widget.userid);
+    } else {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => LoginPage(),
         ),
       );
-    } else if (slogin == 1) {
-      getUser(widget.user_id);
     }
   }
 
@@ -72,13 +63,54 @@ class _MyStatefulWidgetState extends State<UserPage> {
       req = jsonDecode(receivedJson);
       myME = req["user"];
       cJson = req["camera"];
-      // print(json["user_id"]);
+
+      for (var i = 0; i < myME["likeme"].length; i++) {
+        likeme++;
+      }
+      for (var i = 0; i < myME["followers"].length; i++) {
+        followers++;
+      }
+      print(myME);
 /*
       list = await json.decode(receivedJson);
       cJson = await list[1];
        */
       urlimgprofile = hostname + '/images-profile/${id}.png';
       setState(() {});
+    }
+  }
+
+  Future<void> add_follow() async {
+    var request = http.Request(
+      'GET',
+      Uri.parse(hostname +
+          '/add_follow?user_id=' +
+          user_id.toString() +
+          '&userID=' +
+          widget.userid),
+    );
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> add_like() async {
+    var request = http.Request(
+      'GET',
+      Uri.parse(hostname +
+          '/add_like?user_id=' +
+          user_id.toString() +
+          '&userID=' +
+          widget.userid),
+    );
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
     }
   }
 
@@ -92,13 +124,6 @@ class _MyStatefulWidgetState extends State<UserPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: menuBar,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black54,
-        onTap: _onItemTapped,
-      ),
       appBar: AppBar(
         leading: FlatButton(
           onPressed: () {
@@ -133,7 +158,9 @@ class _MyStatefulWidgetState extends State<UserPage> {
             ),
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              add_like();
+            },
             child: Row(
               children: [
                 Icon(
@@ -148,7 +175,9 @@ class _MyStatefulWidgetState extends State<UserPage> {
             ),
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              add_follow();
+            },
             child: Row(
               children: [
                 Icon(
@@ -195,9 +224,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                           width: 100,
                           child: Column(
                             children: [
-                              Text(myME["followers"] == null
-                                  ? myME["followers"].toString()
-                                  : '0'),
+                              Text(followers.toString()),
                               Text("ผู้ติดตาม")
                             ],
                           ),
@@ -205,12 +232,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                         Container(
                           width: 100,
                           child: Column(
-                            children: [
-                              Text(myME["like"] == null
-                                  ? myME["like"].toString()
-                                  : '0'),
-                              Text("ถูกใจ")
-                            ],
+                            children: [Text(likeme.toString()), Text("ถูกใจ")],
                           ),
                         ),
                       ],

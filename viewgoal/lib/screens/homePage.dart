@@ -25,19 +25,17 @@ class HomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<HomePage> {
-  int slogin;
   int user_id;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
+    user_id = await prefs.get('user_id');
+    if (user_id != null && user_id > 0) {
+      listplaying(user_id.toString());
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
           (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
-      listplaying(user_id.toString());
     }
   }
 

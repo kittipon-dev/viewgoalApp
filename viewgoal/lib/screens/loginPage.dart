@@ -18,20 +18,17 @@ class LoginPage extends StatefulWidget {
 class _MyHomePageState extends State<LoginPage> {
   final email = TextEditingController();
   final password = TextEditingController();
-  int slogin;
+  int user_id;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
-      );
+    user_id = await prefs.get('user_id');
+    print(user_id);
+    if (user_id != null && user_id > 0) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomePage()),
+              (Route<dynamic> route) => false);
     }
-    print("Kittipon");
   }
 
   @override
@@ -54,14 +51,10 @@ class _MyHomePageState extends State<LoginPage> {
       print(response.body);
       if (r["login"] == 1) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setInt('login', 1);
         prefs.setInt('user_id', r["user_id"]);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePage(),
-          ),
-        );
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => HomePage()),
+                (Route<dynamic> route) => false);
       }
     }
   }

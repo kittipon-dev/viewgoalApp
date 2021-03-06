@@ -15,18 +15,18 @@ class TopUp extends StatefulWidget {
 var cJson = {};
 
 class _TopUpState extends State<TopUp> {
-  int slogin;
+
   int user_id;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
+    user_id = await prefs.get('user_id');
+    if (user_id > 0) {
+
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
+              (Route<dynamic> route) => false);
     }
   }
 

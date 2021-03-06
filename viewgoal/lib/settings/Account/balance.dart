@@ -16,19 +16,17 @@ var cUser = {};
 
 class _BalanceState extends State<Balance> {
 
-  int slogin;
   int user_id;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
+    user_id = await prefs.get('user_id');
+    if (user_id > 0) {
+      get_point(user_id.toString());
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
               (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
-      get_point(user_id.toString());
     }
   }
 

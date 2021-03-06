@@ -34,7 +34,7 @@ class PlayPage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<PlayPage> {
-  int slogin;
+
   int user_id;
 
   bool f = false;
@@ -42,15 +42,15 @@ class _MyStatefulWidgetState extends State<PlayPage> {
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    slogin = await prefs.get('login');
-    if (slogin != 1) {
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => LoginPage()),
-          (Route<dynamic> route) => false);
-    } else if (slogin == 1) {
-      user_id = prefs.get('user_id');
+    user_id = await prefs.get('user_id');
+    if (user_id != null && user_id > 0) {
       getPlay(widget.idcam);
       getComment(widget.idcam);
+    }  else {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+              (Route<dynamic> route) => false);
+
     }
   }
 
@@ -187,29 +187,10 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     ch();
   }
 
-  int _selectedIndex = 0;
-  final page = [HomePage(), MapPage(), InboxPage(), GiftPage(), MePage()];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => page[_selectedIndex]),
-          (Route<dynamic> route) => false);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: menuBar,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black54,
-        onTap: _onItemTapped,
-      ),
       appBar: AppBar(
         leading: FlatButton(
           onPressed: () {
@@ -279,7 +260,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => UserPage(
-                                    user_id: cJson["user_id"].toString())),
+                                    userid: cJson["user_id"].toString())),
                           );
                         },
                       ),
