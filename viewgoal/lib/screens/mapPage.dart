@@ -158,6 +158,7 @@ class _MapPageState extends State<MapPage> {
   // }
 
   Widget _googleMap(BuildContext context) {
+
     return Container(
       height: MediaQuery
           .of(context)

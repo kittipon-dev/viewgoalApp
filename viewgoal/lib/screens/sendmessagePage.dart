@@ -22,19 +22,18 @@ var listLike = [];
 String urlimgprofile = hostname + '/images-profile/null.png';
 
 /// This is the stateful widget that the main application instantiates.
-class MessagePage extends StatefulWidget {
-  MessagePage({Key key, this.idcam}) : super(key: key);
-  String idcam;
+class SendMessagePage extends StatefulWidget {
+  SendMessagePage({Key key, this.ruserid}) : super(key: key);
+  String ruserid;
 
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
 /// This is the private State class that goes with MyStatefulWidget.
-class _MyStatefulWidgetState extends State<MessagePage> {
+class _MyStatefulWidgetState extends State<SendMessagePage> {
   int slogin;
   int user_id;
-
   bool f = false;
   bool l = false;
 
@@ -44,32 +43,50 @@ class _MyStatefulWidgetState extends State<MessagePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = await prefs.get('user_id');
     if (user_id != null && user_id > 0) {
-      getComment(widget.idcam.toString());
+      getMes(widget.ruserid.toString());
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     }
   }
 
   Future<void> initializePlayer() async {}
 
-  Future<void> getComment(id) async {
+  Future<void> sendMes() async {
+    final http.Response response = await http.post(
+      Uri.parse(hostname + '/sendmes'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        't_user_id': user_id.toString(),
+        'r_user_id': widget.ruserid,
+        'mes': txtpost.text,
+      }),
+    );
+    if (response.statusCode == 200) {
+      getMes(widget.ruserid.toString());
+    }
+  }
+
+  Future<void> getMes(id) async {
     var request = await http.Request(
         'GET',
         Uri.parse(hostname +
-            '/comment?_id=' +
+            '/get_mes?r_user_id=' +
             id +
-            '&user_id=' +
+            '&t_user_id=' +
             user_id.toString()));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       cJson = jsonDecode(receivedJson);
-      /*
-      urlimgprofile = hostname + '/images-profile/${cJson["user_id"]}.png';
-      listplaying(user_id.toString());
-       */
+      list = cJson["mes"];
+      print(list);
+      setState(() {
+        txtpost.text = "";
+      });
     }
   }
 
@@ -95,13 +112,6 @@ class _MyStatefulWidgetState extends State<MessagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        items: menuBar,
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.black54,
-        onTap: _onItemTapped,
-      ),
       appBar: AppBar(
         leading: FlatButton(
           onPressed: () {
@@ -122,28 +132,43 @@ class _MyStatefulWidgetState extends State<MessagePage> {
               child: Container(
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: ListView.builder(
-                  itemCount: 1,
+                  itemCount: list.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      child: Card(
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(hostname +
-                                  '/images-profile/null.png'),
+                    return list[index]["t_user_id"] == user_id.toString()
+                        ? Container(
+                            height: 50,
+                            padding: EdgeInsets.only(left: 200),
+                            child: Card(
+                              color: Colors.indigoAccent,
+                              child: Text(
+                                list[index]["mes"],
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 19,
+                                ),
+                              ),
                             ),
-                            Text("Test")
-                          ],
-                        ),
-                      ),
-                    );
+                          )
+                        : Container(
+                            height: 50,
+                            padding: EdgeInsets.only(right: 200),
+                            child: Card(
+                              child: Text(
+                                list[index]["mes"],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 19,
+                                ),
+                              ),
+                            ),
+                          );
                   },
                 ),
               ),
             ),
             Container(
               padding:
-              EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
+                  EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 20),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -156,9 +181,11 @@ class _MyStatefulWidgetState extends State<MessagePage> {
                   ),
                   RaisedButton(
                     onPressed: () {
-
+                      if (txtpost.text != "") {
+                        sendMes();
+                      }
                     },
-                    child: Text("Send2"),
+                    child: Text("Send"),
                   )
                 ],
               ),
