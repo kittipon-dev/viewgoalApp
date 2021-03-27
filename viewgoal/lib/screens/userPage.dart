@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
-import 'package:viewgoal/screens/messagePage.dart';
+import 'package:viewgoal/screens/sendmessagePage.dart';
 import 'package:viewgoal/screens/playPage.dart';
 import 'package:viewgoal/screens/settingsPage.dart';
 
@@ -70,7 +70,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
       for (var i = 0; i < myME["followers"].length; i++) {
         followers++;
       }
-      print(myME);
+      //print(myME);
 /*
       list = await json.decode(receivedJson);
       cJson = await list[1];
@@ -140,7 +140,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MessagePage(),
+                  builder: (context) => SendMessagePage(ruserid: widget.userid,),
                 ),
               );
             },
