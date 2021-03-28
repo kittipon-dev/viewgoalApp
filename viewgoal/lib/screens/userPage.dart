@@ -38,6 +38,9 @@ class _MyStatefulWidgetState extends State<UserPage> {
   int likeme = 0;
   int followers = 0;
 
+  bool _isLike = false;
+  bool _isFollo = false;
+
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = await prefs.get('user_id');
@@ -63,13 +66,19 @@ class _MyStatefulWidgetState extends State<UserPage> {
       req = jsonDecode(receivedJson);
       myME = req["user"];
       cJson = req["camera"];
-
       for (var i = 0; i < myME["likeme"].length; i++) {
         likeme++;
+        if (myME["likeme"][i].toString() == user_id.toString()) {
+          _isLike = true;
+        }
       }
       for (var i = 0; i < myME["followers"].length; i++) {
         followers++;
+        if (myME["followers"][i].toString() == user_id.toString()) {
+          _isFollo = true;
+        }
       }
+
       //print(myME);
 /*
       list = await json.decode(receivedJson);
@@ -91,6 +100,25 @@ class _MyStatefulWidgetState extends State<UserPage> {
     );
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+      _isFollo = true;
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> un_follow() async {
+    var request = http.Request(
+      'GET',
+      Uri.parse(hostname +
+          '/un_follow?user_id=' +
+          user_id.toString() +
+          '&userID=' +
+          widget.userid),
+    );
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      _isFollo = false;
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -108,6 +136,25 @@ class _MyStatefulWidgetState extends State<UserPage> {
     );
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
+      _isLike = true;
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> un_like() async {
+    var request = http.Request(
+      'GET',
+      Uri.parse(hostname +
+          '/un_like?user_id=' +
+          user_id.toString() +
+          '&userID=' +
+          widget.userid),
+    );
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      _isLike = false;
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -135,62 +182,72 @@ class _MyStatefulWidgetState extends State<UserPage> {
           ),
         ),
         actions: [
-          FlatButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SendMessagePage(ruserid: widget.userid,),
-                ),
-              );
-            },
-            child: Row(
-              children: [
-                Icon(
-                  Icons.message_outlined,
-                  color: Colors.black54,
-                ),
-                Text(
-                  "Message ",
-                  style: TextStyle(color: Colors.black54),
+          widget.userid != user_id.toString()
+              ? FlatButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SendMessagePage(
+                          ruserid: widget.userid,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.message_outlined,
+                        color: Colors.black54,
+                      ),
+                      Text(
+                        "Message ",
+                        style: TextStyle(color: Colors.black54),
+                      )
+                    ],
+                  ),
                 )
-              ],
-            ),
-          ),
-          FlatButton(
-            onPressed: () {
-              add_like();
-            },
-            child: Row(
-              children: [
-                Icon(
-                  Icons.favorite_outline,
-                  color: Colors.black54,
-                ),
-                Text(
-                  "Like",
-                  style: TextStyle(color: Colors.black54),
+              : Text(""),
+          widget.userid != user_id.toString()
+              ? FlatButton(
+                  onPressed: () {
+                    _isLike != true ? add_like() : un_like();
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        _isLike != true
+                            ? Icons.favorite_outline
+                            : Icons.favorite,
+                        color: Colors.black54,
+                      ),
+                      Text(
+                        "Like",
+                        style: TextStyle(color: Colors.black54),
+                      )
+                    ],
+                  ),
                 )
-              ],
-            ),
-          ),
-          FlatButton(
-            onPressed: () {
-              add_follow();
-            },
-            child: Row(
-              children: [
-                Icon(
-                  Icons.add,
-                  color: Colors.black54,
-                ),
-                Text(
-                  "Follow",
-                  style: TextStyle(color: Colors.black54),
+              : Text(""),
+          widget.userid != user_id.toString()
+              ? FlatButton(
+                  onPressed: () {
+                    _isFollo != true ? add_follow() : un_follow();
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        _isFollo != true ? Icons.add : Icons.remove,
+                        color: Colors.black54,
+                      ),
+                      Text(
+                        "Follow",
+                        style: TextStyle(color: Colors.black54),
+                      )
+                    ],
+                  ),
                 )
-              ],
-            ),
-          ),
+              : Text(""),
         ],
         backgroundColor: Colors.transparent,
         elevation: 0.0,

@@ -34,7 +34,6 @@ class PlayPage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<PlayPage> {
-
   int user_id;
 
   bool f = false;
@@ -46,11 +45,10 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     if (user_id != null && user_id > 0) {
       getPlay(widget.idcam);
       getComment(widget.idcam);
-    }  else {
+    } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
-              (Route<dynamic> route) => false);
-
+          (Route<dynamic> route) => false);
     }
   }
 
@@ -301,8 +299,10 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          CommentPage(idcam: widget.idcam,cComment: cComment,),
+                                      builder: (context) => CommentPage(
+                                        idcam: widget.idcam,
+                                        cComment: cComment,
+                                      ),
                                     ),
                                   );
                                 },
