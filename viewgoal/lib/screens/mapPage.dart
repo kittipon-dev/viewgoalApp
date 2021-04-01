@@ -6,17 +6,11 @@ import 'package:viewgoal/screens/loginPage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-// import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 import 'dart:async';
-import 'dart:convert';
 
-import '../menu_bar.dart';
-import 'giftPage.dart';
-import 'mePage.dart';
-import 'inboxPage.dart';
-import 'homePage.dart';
+import 'package:viewgoal/util/markers.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key key, this.title}) : super(key: key);
@@ -28,15 +22,39 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  /*
-  LatLng _initialcameraposition = LatLng(13.7650836, 100.537966);
-  GoogleMapController _controller;
-  Location _location = Location();
-*/
+  List<Marker> _marker = [];
 
   Completer<GoogleMapController> _controller = Completer();
-
   LocationData currentLocation;
+
+  BitmapDescriptor customIcon;
+
+  customMarkerIcon() async {
+    customIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(
+          size: Size(10, 10),
+        ),
+        'assets/images/logo.png');
+  }
+
+  getMarker() {
+    for (int i = 0; i < cJson.length; i++) {
+      _marker.add(
+        Marker(
+            markerId: MarkerId(cJson[i]['name']),
+            position: LatLng(cJson[i]['lat'], cJson[i]['long']),
+            infoWindow: InfoWindow(title: cJson[i]['name']),
+            icon: customMarkerIcon(),
+            onTap: () {
+              print('bruh$i');
+            }),
+      );
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
+  }
 
   // int slogin;
 
@@ -56,6 +74,8 @@ class _MapPageState extends State<MapPage> {
   @override
   initState() {
     super.initState();
+    customMarkerIcon();
+    getMarker();
     // ch();
   }
 
@@ -64,49 +84,49 @@ class _MapPageState extends State<MapPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        actions: [],
-        backgroundColor: Colors.transparent,
+        title: Text('Google Map'),
+        backgroundColor: Colors.amber[800],
+        centerTitle: true,
         elevation: 0.0,
       ),
       body: Stack(
         children: <Widget>[
           _googleMap(context),
-          Positioned(
-            top: 50.0,
-            right: 40.0,
-            left: 40.0,
-            child: Container(
-              height: 50.0,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey, width: 1.0),
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.white),
-              child: TextField(
-                cursorColor: Colors.grey,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.search),
-                    onPressed: () {},
-                    iconSize: 30,
-                    color: Colors.grey,
-                  ),
-                ),
-              ),
-            ), //search bar
-          ),
+          // Positioned(
+          //   top: 50.0,
+          //   right: 40.0,
+          //   left: 40.0,
+          //   child: Container(
+          //     height: 50.0,
+          //     width: double.infinity,
+          //     decoration: BoxDecoration(
+          //         border: Border.all(color: Colors.grey, width: 1.0),
+          //         borderRadius: BorderRadius.circular(30),
+          //         color: Colors.white),
+          //     child: TextField(
+          //       cursorColor: Colors.grey,
+          //       decoration: InputDecoration(
+          //         border: InputBorder.none,
+          //         contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
+          //         suffixIcon: IconButton(
+          //           icon: Icon(Icons.search),
+          //           onPressed: () {},
+          //           iconSize: 30,
+          //           color: Colors.grey,
+          //         ),
+          //       ),
+          //     ),
+          //   ), //search bar
+          // ),
           Positioned(
             // left: 10,
             right: -13,
             bottom: 105,
             child: RawMaterialButton(
               onPressed: () {
-                // _goToMe();
+                _goToMe();
               },
               elevation: 0,
-
               fillColor: Colors.white.withOpacity(0.7),
               child: Icon(
                 Icons.my_location_sharp,
@@ -122,43 +142,32 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  // void getCurrentLocation() async {
-  //   var position = await Geolocator.getCurrentPosition(
-  //       desiredAccuracy: LocationAccuracy.high);
-  //   var lastPosition = await Geolocator.getLastKnownPosition();
-  //   double lat = position.latitude;
-  //   double long = position.longitude;
-  //   print("$lat , $long");
-  //   print(lastPosition);
-  // }
+  Future<LocationData> getCurrentLocation() async {
+    Location location = Location();
+    try {
+      return await location.getLocation();
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED') {
+        // Permission denied
+      }
+      return null;
+    }
+  }
 
-  // Future<LocationData> getCurrentLocation() async {
-  //   Location location = Location();
-  //   try {
-  //     return await location.getLocation();
-  //   } on PlatformException catch (e) {
-  //     if (e.code == 'PERMISSION_DENIED') {
-  //       // Permission denied
-  //     }
-  //     return null;
-  //   }
-  // }
-
-  // Future _goToMe() async {
-  //   final GoogleMapController controller = await _controller.future;
-  //   currentLocation = await getCurrentLocation();
-  //   controller.animateCamera(
-  //     CameraUpdate.newCameraPosition(
-  //       CameraPosition(
-  //         target: LatLng(currentLocation.latitude, currentLocation.longitude),
-  //         zoom: 16,
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future _goToMe() async {
+    final GoogleMapController controller = await _controller.future;
+    currentLocation = await getCurrentLocation();
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(currentLocation.latitude, currentLocation.longitude),
+          zoom: 16,
+        ),
+      ),
+    );
+  }
 
   Widget _googleMap(BuildContext context) {
-
     return Container(
       height: MediaQuery
           .of(context)
@@ -173,10 +182,8 @@ class _MapPageState extends State<MapPage> {
         mapType: MapType.normal,
         initialCameraPosition:
         CameraPosition(target: LatLng(13.736717, 100.523186), zoom: 5),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        markers: {},
+        onMapCreated: _onMapCreated,
+        markers: Set.from(_marker),
       ),
     );
   }
