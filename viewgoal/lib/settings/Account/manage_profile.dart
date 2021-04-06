@@ -183,7 +183,8 @@ class _MeScreenState extends State<ManagerProfile> {
                       child: CircleAvatar(
                         radius: 80,
                         backgroundImage: _image == null
-                            ? NetworkImage(hostname + '/images-profile/${widget.user_id}.png')
+                            ? NetworkImage(hostname +
+                                '/images-profile/${widget.user_id}.png')
                             : FileImage(
                                 Io.File(_image.path),
                               ),
@@ -263,10 +264,17 @@ class _MeScreenState extends State<ManagerProfile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  OutlineButton(
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(horizontal: 50),
+                      ),
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -276,14 +284,38 @@ class _MeScreenState extends State<ManagerProfile> {
                             letterSpacing: 2.2,
                             color: Colors.black)),
                   ),
-                  RaisedButton(
+                  // RaisedButton(
+                  //   onPressed: () {
+                  //     setProfile();
+                  //   },
+                  //   color: Colors.amber[800],
+                  //   padding: EdgeInsets.symmetric(horizontal: 50),
+                  //   shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(20)),
+                  //   child: Text(
+                  //     'SAVE',
+                  //     style: TextStyle(
+                  //         fontSize: 14,
+                  //         letterSpacing: 2.2,
+                  //         color: Colors.white),
+                  //   ),
+                  // )
+                  ElevatedButton(
                     onPressed: () {
                       setProfile();
                     },
-                    color: Colors.amber[800],
-                    padding: EdgeInsets.symmetric(horizontal: 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20)),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.amber[800]),
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.symmetric(horizontal: 50),
+                      ),
+                      shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
                     child: Text(
                       'SAVE',
                       style: TextStyle(
@@ -338,7 +370,7 @@ class _MeScreenState extends State<ManagerProfile> {
               children: [
                 Container(
                   child: ButtonTheme(
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         _getCam();
                         Navigator.of(context).pop();
@@ -355,7 +387,7 @@ class _MeScreenState extends State<ManagerProfile> {
                 ),
                 Container(
                   child: ButtonTheme(
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         getImage();
                         Navigator.of(context).pop();

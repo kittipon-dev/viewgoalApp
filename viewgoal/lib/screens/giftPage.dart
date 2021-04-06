@@ -1,22 +1,12 @@
-import 'dart:developer';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
 import 'package:viewgoal/screens/advertisingPage.dart';
-import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
-import 'package:viewgoal/screens/mapPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
-import 'package:viewgoal/screens/playPage.dart';
 import 'dart:async';
 import 'dart:convert';
-
-import '../menu_bar.dart';
-import 'homePage.dart';
 
 var cJson = [];
 var cJsonF = [];
@@ -105,7 +95,7 @@ class _MyHomePageState extends State<GiftPage> {
             ],
           ),
           actions: [
-            FlatButton(onPressed: () {}, child: Text(cUser["point"].toString()))
+            TextButton(onPressed: () {}, child: Text(cUser["point"].toString()))
           ],
         ),
         body: TabBarView(
@@ -114,7 +104,7 @@ class _MyHomePageState extends State<GiftPage> {
               child: ListView.builder(
                 itemCount: cJson.length,
                 itemBuilder: (context, index) {
-                  return FlatButton(
+                  return TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -144,7 +134,7 @@ class _MyHomePageState extends State<GiftPage> {
               child: ListView.builder(
                 itemCount: cJsonF.length,
                 itemBuilder: (context, index) {
-                  return FlatButton(
+                  return TextButton(
                     onPressed: () {},
                     child: Card(
                       margin: EdgeInsets.only(top: 10),

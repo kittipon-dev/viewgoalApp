@@ -11,8 +11,6 @@ import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/playPage.dart';
 import 'dart:async';
 import 'dart:convert';
-
-import '../menu_bar.dart';
 import 'giftPage.dart';
 
 var cJson = [];
@@ -175,7 +173,7 @@ class _HomeState extends State<Home> {
             ],
           ),
           actions: [
-            FlatButton(onPressed: () {}, child: Icon(Icons.search_rounded))
+            TextButton(onPressed: () {}, child: Icon(Icons.search_rounded))
           ],
         ),
         body: TabBarView(
@@ -214,7 +212,7 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                 itemCount: cJson.length,
                 itemBuilder: (context, index) {
-                  return FlatButton(
+                  return TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -306,7 +304,7 @@ class _HomeState extends State<Home> {
               child: ListView.builder(
                 itemCount: cJsonF.length,
                 itemBuilder: (context, index) {
-                  return FlatButton(
+                  return TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,

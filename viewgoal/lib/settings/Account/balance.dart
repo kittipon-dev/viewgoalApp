@@ -15,7 +15,6 @@ class Balance extends StatefulWidget {
 var cUser = {};
 
 class _BalanceState extends State<Balance> {
-
   int user_id;
 
   Future<void> ch() async {
@@ -26,14 +25,13 @@ class _BalanceState extends State<Balance> {
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     }
   }
 
-
   Future<void> get_point(id) async {
     var request =
-    http.Request('GET', Uri.parse(hostname + '/get_point?user_id=' + id));
+        http.Request('GET', Uri.parse(hostname + '/get_point?user_id=' + id));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
@@ -50,7 +48,6 @@ class _BalanceState extends State<Balance> {
     ch();
     //print(chLogin);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +83,7 @@ class _BalanceState extends State<Balance> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Spacer(),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -102,11 +99,17 @@ class _BalanceState extends State<Balance> {
                       fontSize: 20,
                     ),
                   ),
-                  color: Color(0xFFff0000),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      Color(0xFFff0000),
+                    ),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
                   ),
-                )
+                ),
               ],
             ),
             Column(

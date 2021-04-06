@@ -18,7 +18,6 @@ import 'package:viewgoal/settings/Support/help_center.dart';
 import 'package:viewgoal/settings/Support/report_a_problem.dart';
 import 'package:viewgoal/settings/add_account.dart';
 import 'package:viewgoal/settings/free_up_space.dart';
-import 'package:viewgoal/settings/log_out.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:viewgoal/settings/Support/safe_center.dart';
 

@@ -1,20 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/menu_bar.dart';
 import 'package:viewgoal/screens/commentPage.dart';
-import 'package:viewgoal/screens/homePage.dart';
-import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
-import 'package:viewgoal/screens/mapPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/userPage.dart';
-
-import 'giftPage.dart';
 
 var cJson = {};
 var list = [];
@@ -190,7 +182,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: FlatButton(
+        leading: TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -200,7 +192,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
           ),
         ),
         actions: [
-          FlatButton(
+          TextButton(
               onPressed: () {
                 if (f == false) {
                   add_favorite(user_id.toString());
@@ -252,7 +244,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                 children: [
                   Container(
                     child: CircleAvatar(
-                      child: FlatButton(
+                      child: TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -279,8 +271,13 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                           child: ButtonBar(
                             children: [
                               Text(cJson["view"].toString() + " view"),
-                              FlatButton(
-                                textColor: Colors.black,
+                              TextButton(
+                                style: ButtonStyle(
+                                  textStyle:
+                                      MaterialStateProperty.all<TextStyle>(
+                                    TextStyle(color: Colors.black),
+                                  ),
+                                ),
                                 onPressed: () {
                                   like();
                                 },
@@ -293,8 +290,13 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                                   ],
                                 ),
                               ),
-                              FlatButton(
-                                textColor: Colors.black,
+                              TextButton(
+                                style: ButtonStyle(
+                                  textStyle:
+                                  MaterialStateProperty.all<TextStyle>(
+                                    TextStyle(color: Colors.black),
+                                  ),
+                                ),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -326,7 +328,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
               child: ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (context, index) {
-                  return FlatButton(
+                  return TextButton(
                     onPressed: () {
                       Navigator.push(
                         context,

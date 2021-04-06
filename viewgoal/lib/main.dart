@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:viewgoal/screens/homePage.dart';
-import 'package:viewgoal/screens/registerPage.dart';
 
 void main() {
   runApp(MyApp());

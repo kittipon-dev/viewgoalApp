@@ -1,22 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/menu_bar.dart';
-import 'package:viewgoal/screens/homePage.dart';
-import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
-import 'package:viewgoal/screens/mapPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/userPage.dart';
 
-import 'giftPage.dart';
 
-/// This is the stateful widget that the main application instantiates.
 class CommentPage extends StatefulWidget {
   CommentPage({Key key, this.idcam, this.cComment}) : super(key: key);
   String idcam;
@@ -28,7 +20,6 @@ class CommentPage extends StatefulWidget {
 
 var cComment = [];
 
-/// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<CommentPage> {
   int slogin;
   int user_id;
@@ -92,7 +83,7 @@ class _MyStatefulWidgetState extends State<CommentPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: FlatButton(
+        leading: ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -120,7 +111,7 @@ class _MyStatefulWidgetState extends State<CommentPage> {
                       ),
                     ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       PostComment();
                     },
@@ -142,7 +133,7 @@ class _MyStatefulWidgetState extends State<CommentPage> {
                             CircleAvatar(
                               backgroundImage: NetworkImage(hostname +
                                   '/images-profile/${cComment[index]["user_id"]}.png'),
-                              child: FlatButton(
+                              child: TextButton(
                                 onPressed: () {
                                   Navigator.push(
                                     context,

@@ -4,17 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/screens/loginPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/sendmessagePage.dart';
 import 'package:viewgoal/screens/playPage.dart';
-import 'package:viewgoal/screens/settingsPage.dart';
 
 import '../config.dart';
-import '../menu_bar.dart';
-import 'addCamera.dart';
-import 'homePage.dart';
-import 'mapPage.dart';
-import 'inboxPage.dart';
 
 List<dynamic> cJson = [];
 var req = {};
@@ -172,7 +165,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: FlatButton(
+        leading: TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -183,7 +176,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
         ),
         actions: [
           widget.userid != user_id.toString()
-              ? FlatButton(
+              ? TextButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -209,7 +202,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                 )
               : Text(""),
           widget.userid != user_id.toString()
-              ? FlatButton(
+              ? TextButton(
                   onPressed: () {
                     _isLike != true ? add_like() : un_like();
                   },
@@ -230,7 +223,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                 )
               : Text(""),
           widget.userid != user_id.toString()
-              ? FlatButton(
+              ? TextButton(
                   onPressed: () {
                     _isFollo != true ? add_follow() : un_follow();
                   },
@@ -318,7 +311,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                 child: ListView.builder(
                   itemCount: cJson.length,
                   itemBuilder: (context, index) {
-                    return FlatButton(
+                    return TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,

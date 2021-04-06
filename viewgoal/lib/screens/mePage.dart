@@ -10,12 +10,7 @@ import 'package:viewgoal/screens/userPage.dart';
 import 'package:viewgoal/settings/Account/manage_profile.dart';
 
 import '../config.dart';
-import '../menu_bar.dart';
 import 'addCamera.dart';
-import 'giftPage.dart';
-import 'homePage.dart';
-import 'mapPage.dart';
-import 'inboxPage.dart';
 
 List<dynamic> cJson = [];
 var req = {};
@@ -128,7 +123,7 @@ class _MyStatefulWidgetState extends State<MePage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         actions: [
-          FlatButton(
+          TextButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -162,7 +157,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
-                    child: FlatButton(
+                    child: TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -309,7 +304,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                       child: ListView.builder(
                                         itemCount: cJson.length,
                                         itemBuilder: (context, index) {
-                                          return FlatButton(
+                                          return TextButton(
                                             onPressed: () {
                                               Navigator.push(
                                                 context,
@@ -437,7 +432,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                               child: ListView.builder(
                                 itemCount: cSave.length,
                                 itemBuilder: (context, index) {
-                                  return FlatButton(
+                                  return TextButton(
                                     onPressed: () {
                                       Navigator.push(
                                         context,
@@ -490,7 +485,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                               child: ListView.builder(
                                 itemCount: 0,
                                 itemBuilder: (context, index) {
-                                  return FlatButton(
+                                  return TextButton(
                                     onPressed: () {},
                                     child: Container(
                                       child: Card(
@@ -536,7 +531,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                               child: ListView.builder(
                                 itemCount: cFollowing.length,
                                 itemBuilder: (context, index) {
-                                  return FlatButton(
+                                  return TextButton(
                                     onPressed: () {
                                       Navigator.push(
                                         context,

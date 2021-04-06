@@ -5,14 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/menu_bar.dart';
-import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'dart:async';
-import 'package:viewgoal/screens/mapPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
 
-import 'giftPage.dart';
 import 'sendmessagePage.dart';
 
 var cJsonM = [];
@@ -147,7 +142,7 @@ class _MyHomePageState extends State<InboxPage> {
                       itemCount: cJsonN.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -218,7 +213,7 @@ class _MyHomePageState extends State<InboxPage> {
                       itemCount: cJsonM.length,
                       itemBuilder: (context, index) {
                         return Container(
-                          child: FlatButton(
+                          child: TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,

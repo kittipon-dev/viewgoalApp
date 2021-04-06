@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/screens/mePage.dart';
 
 class AddCameraPage extends StatefulWidget {
   AddCameraPage({Key key, this.id}) : super(key: key);
@@ -135,7 +134,7 @@ class _MyHomePageState extends State<AddCameraPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 5),
-                  child: RaisedButton(
+                  child: ElevatedButton(
                     onPressed: () async {
                       /*
                       LocationResult result = await showLocationPicker(
@@ -256,16 +255,12 @@ class _MyHomePageState extends State<AddCameraPage> {
                   ),
                 ),
                 Container(
-                  child: RaisedButton(
-                    color: Color(0xFFF1771A),
+                  child: ElevatedButton(
+                    child: Text('Add',style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Colors.amber[800])),
                     onPressed: () {
                       _save();
                     },
-                    child: Text(
-                      "Add",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
                   ),
                 )
               ],

@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/screens/loginPage.dart';
-
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({Key key, this.title}) : super(key: key);
@@ -75,7 +73,7 @@ class _MyHomePageState extends State<RegisterPage> {
                   child: TextFormField(
                     controller: email,
                     validator: (value) =>
-                    value.isEmpty ? 'Input cannot be empty!' : null,
+                        value.isEmpty ? 'Input cannot be empty!' : null,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Email or Phone',
@@ -87,7 +85,7 @@ class _MyHomePageState extends State<RegisterPage> {
                   child: TextFormField(
                     controller: password,
                     validator: (value) =>
-                    value.isEmpty ? 'Input cannot be empty!' : null,
+                        value.isEmpty ? 'Input cannot be empty!' : null,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -100,7 +98,7 @@ class _MyHomePageState extends State<RegisterPage> {
                   child: TextFormField(
                     controller: trypassword,
                     validator: (value) =>
-                    value.isEmpty ? 'Input cannot be empty!' : null,
+                        value.isEmpty ? 'Input cannot be empty!' : null,
                     obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -113,7 +111,7 @@ class _MyHomePageState extends State<RegisterPage> {
                   child: TextFormField(
                     controller: name,
                     validator: (value) =>
-                    value.isEmpty ? 'Input cannot be empty!' : null,
+                        value.isEmpty ? 'Input cannot be empty!' : null,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'First Name',
@@ -123,7 +121,7 @@ class _MyHomePageState extends State<RegisterPage> {
                 Container(
                   child: DateTimePicker(
                     validator: (value) =>
-                    value.isEmpty ? 'Input cannot be empty!' : null,
+                        value.isEmpty ? 'Input cannot be empty!' : null,
                     type: DateTimePickerType.date,
                     firstDate: DateTime(1950),
                     lastDate: DateTime(2050),
@@ -142,8 +140,12 @@ class _MyHomePageState extends State<RegisterPage> {
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 20),
-                  child: RaisedButton(
-                    color: Color(0xFFF1771A),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        Color(0xFFF1771A),
+                      ),
+                    ),
                     onPressed: () => register(),
                     child: Text(
                       "Sign Up",

@@ -27,7 +27,7 @@ class _MyHomePageState extends State<LoginPage> {
     if (user_id != null && user_id > 0) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false);
+          (Route<dynamic> route) => false);
     }
   }
 
@@ -54,7 +54,7 @@ class _MyHomePageState extends State<LoginPage> {
         prefs.setInt('user_id', r["user_id"]);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => HomePage()),
-                (Route<dynamic> route) => false);
+            (Route<dynamic> route) => false);
       }
     }
   }
@@ -143,9 +143,8 @@ class _MyHomePageState extends State<LoginPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    RaisedButton(
-                      textColor: Colors.white,
-                      color: Color.fromRGBO(241, 119, 26, 1),
+                    ElevatedButton(
+                      onPressed: () => login(),
                       child: Text(
                         'Login',
                         style: TextStyle(
@@ -153,14 +152,25 @@ class _MyHomePageState extends State<LoginPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () => login(),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.amber[800]),
+                        shape:
+                          MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
                       ),
                     ),
-                    RaisedButton(
-                      textColor: Colors.white,
-                      color: Color.fromRGBO(241, 119, 26, 1),
+
+                    ElevatedButton(
+                      onPressed: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => RegisterPage()),
+                            );
+                      },
                       child: Text(
                         'Sign Up',
                         style: TextStyle(
@@ -168,17 +178,15 @@ class _MyHomePageState extends State<LoginPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegisterPage()),
-                        );
-                      },
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.amber[800]),
+                        shape:
+                        MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                        ),
+                      ),)
                   ],
                 ),
               ),

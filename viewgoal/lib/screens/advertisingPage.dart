@@ -1,22 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/menu_bar.dart';
-import 'package:viewgoal/screens/homePage.dart';
-import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
-import 'package:viewgoal/screens/mapPage.dart';
-import 'package:viewgoal/screens/mePage.dart';
-import 'package:viewgoal/screens/userPage.dart';
 
-import 'giftPage.dart';
-
-/// This is the stateful widget that the main application instantiates.
 class AdvertisingPage extends StatefulWidget {
   AdvertisingPage({Key key, this.aID, this.cA}) : super(key: key);
   String aID;
@@ -28,7 +18,6 @@ class AdvertisingPage extends StatefulWidget {
 
 var cA = {};
 
-/// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<AdvertisingPage> {
   int user_id;
 
@@ -90,7 +79,7 @@ class _MyStatefulWidgetState extends State<AdvertisingPage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(cA["topic"]),
-        leading: FlatButton(
+        leading: ElevatedButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -116,7 +105,7 @@ class _MyStatefulWidgetState extends State<AdvertisingPage> {
                 child: Text(cA["txt"]),
               ),
               Container(
-                child: RaisedButton(
+                child: ElevatedButton(
                   onPressed: () {
                     use_point();
                   },

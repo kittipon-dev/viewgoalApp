@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:viewgoal/screens/loginPage.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -22,9 +20,11 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  Completer<GoogleMapController> _controller = Completer();
+
   List<Marker> _marker = [];
 
-  Completer<GoogleMapController> _controller = Completer();
+
   LocationData currentLocation;
 
   BitmapDescriptor customIcon;
@@ -37,14 +37,14 @@ class _MapPageState extends State<MapPage> {
         'assets/images/logo.png');
   }
 
-  getMarker() {
+  getMarker(){
     for (int i = 0; i < cJson.length; i++) {
-      _marker.add(
+       _marker.add(
         Marker(
             markerId: MarkerId(cJson[i]['name']),
             position: LatLng(cJson[i]['lat'], cJson[i]['long']),
             infoWindow: InfoWindow(title: cJson[i]['name']),
-            icon: customMarkerIcon(),
+            icon: customIcon,
             onTap: () {
               print('bruh$i');
             }),

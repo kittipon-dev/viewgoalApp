@@ -1,17 +1,14 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/menu_bar.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/inboxPage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
-import 'package:viewgoal/screens/userPage.dart';
 
 import 'giftPage.dart';
 
@@ -113,7 +110,7 @@ class _MyStatefulWidgetState extends State<SendMessagePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: FlatButton(
+        leading: TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
@@ -179,7 +176,7 @@ class _MyStatefulWidgetState extends State<SendMessagePage> {
                       ),
                     ),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     onPressed: () {
                       if (txtpost.text != "") {
                         sendMes();
