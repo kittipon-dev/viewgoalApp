@@ -31,7 +31,7 @@ class UserPage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<UserPage> {
-  int slogin;
+
   int user_id;
   String urlimgprofile = hostname + '/images-profile/null.png';
 

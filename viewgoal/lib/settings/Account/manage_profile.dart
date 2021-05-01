@@ -30,7 +30,6 @@ class _MeScreenState extends State<ManagerProfile> {
   @override
   void initState() {
     super.initState();
-    print(widget.myme);
     textName.text = widget.myme["name"];
     textNote.text = widget.myme["note"];
   }
@@ -52,7 +51,6 @@ class _MeScreenState extends State<ManagerProfile> {
     // to base 64
     final bytes = Io.File(path).readAsBytesSync();
     img64 = base64Encode(bytes);
-    print(img64);
   }
 
   _getCam() async {
@@ -67,7 +65,6 @@ class _MeScreenState extends State<ManagerProfile> {
     // to base 64
     final bytes = Io.File(path).readAsBytesSync();
     String img64 = base64Encode(bytes);
-    print(img64);
   }
 
   _cropImage(filePath) async {
@@ -92,16 +89,16 @@ class _MeScreenState extends State<ManagerProfile> {
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
+
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      if (img64 == null) {
+      //print(await response.stream.bytesToString());
+      //print(img64);
+      if (_image == null) {
         Navigator.pop(context);
       } else {
         upload(_image);
       }
-    } else {
-      print(response.reasonPhrase);
-    }
+    } else {}
   }
 
   upload(File imageFile) async {
@@ -127,12 +124,9 @@ class _MeScreenState extends State<ManagerProfile> {
     // send
     var response = await request.send();
     print(response.statusCode);
-
     if (response.statusCode == 200) {
       Navigator.pop(context);
-    } else {
-      print(response.reasonPhrase);
-    }
+    } else {}
   }
 
   @override
@@ -183,7 +177,8 @@ class _MeScreenState extends State<ManagerProfile> {
                       child: CircleAvatar(
                         radius: 80,
                         backgroundImage: _image == null
-                            ? NetworkImage(hostname + '/images-profile/${widget.user_id}.png')
+                            ? NetworkImage(hostname +
+                                '/images-profile/${widget.user_id}.png')
                             : FileImage(
                                 Io.File(_image.path),
                               ),

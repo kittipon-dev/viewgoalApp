@@ -12,13 +12,13 @@ import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/userPage.dart';
-
+import 'package:socket_io/socket_io.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'giftPage.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 var cJson = {};
 var list = [];
-var listF = [];
-var listLike = [];
 String urlimgprofile = hostname + '/images-profile/null.png';
 
 /// This is the stateful widget that the main application instantiates.
@@ -43,7 +43,7 @@ class _MyStatefulWidgetState extends State<SendMessagePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = await prefs.get('user_id');
     if (user_id != null && user_id > 0) {
-      getMes(widget.ruserid.toString());
+      getMes();
     } else {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => LoginPage()),
@@ -66,34 +66,65 @@ class _MyStatefulWidgetState extends State<SendMessagePage> {
       }),
     );
     if (response.statusCode == 200) {
-      getMes(widget.ruserid.toString());
+      list.add({
+        't_user_id': user_id.toString(),
+        'r_user_id': widget.ruserid,
+        'mes': txtpost.text,
+      });
+      txtpost.text = "";
+      setState(() {});
     }
   }
 
-  Future<void> getMes(id) async {
+  Future<void> getMes() async {
     var request = await http.Request(
         'GET',
         Uri.parse(hostname +
             '/get_mes?r_user_id=' +
-            id +
+            widget.ruserid +
             '&t_user_id=' +
             user_id.toString()));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       cJson = jsonDecode(receivedJson);
-      list = cJson["mes"];
-      print(list);
+      list = cJson["data"];
       setState(() {
         txtpost.text = "";
       });
     }
   }
 
+  void io() {
+    print('IO');
+    // Dart client
+    IO.Socket socket = IO.io(
+        'http://192.168.2.14:3000',
+        OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .build());
+    socket.close();
+    socket.connect();
+    socket.onConnect((data) {
+      print("connected");
+      socket.emit("message");
+    });
+    socket.on('event', (data) => print(data));
+    socket.onDisconnect((_) => print('disconnect'));
+    socket.on('2', (_) => ioadd(_));
+  }
+
+  void ioadd(_) {
+    list.add(_);
+    setState(() {});
+  }
+
   @override
   void initState() {
     super.initState();
     ch();
+    io();
   }
 
   int _selectedIndex = 0;

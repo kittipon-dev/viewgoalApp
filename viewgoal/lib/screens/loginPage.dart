@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
+import 'package:viewgoal/main.dart';
+import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/registerPage.dart';
 
@@ -26,8 +28,8 @@ class _MyHomePageState extends State<LoginPage> {
     print(user_id);
     if (user_id != null && user_id > 0) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => HomePage()),
-              (Route<dynamic> route) => false);
+          MaterialPageRoute(builder: (context) => MainPage()),
+          (Route<dynamic> route) => false);
     }
   }
 
@@ -53,9 +55,14 @@ class _MyHomePageState extends State<LoginPage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setInt('user_id', r["user_id"]);
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => HomePage()),
-                (Route<dynamic> route) => false);
+            MaterialPageRoute(builder: (context) => MainPage()),
+            (Route<dynamic> route) => false);
       }
+    } else if (response.statusCode == 401) {
+      password.text = "";
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text("Sending Message"),
+      ));
     }
   }
 

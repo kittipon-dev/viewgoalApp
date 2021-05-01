@@ -80,6 +80,24 @@ class _MyHomePageState extends State<GiftPage> {
     //print(chLogin);
   }
 
+  // int _currentIndex = 3;
+  // List<Widget> _widgetOptions = <Widget>[
+  //   HomePage(),
+  //   MapPage(),
+  //   InboxPage(),
+  //   GiftPage(),
+  //   MePage(),
+  // ];
+  // void _onItemTap(int index) {
+  //   setState(() {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
+  //     );
+  //     _currentIndex = index;
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -108,6 +126,13 @@ class _MyHomePageState extends State<GiftPage> {
             FlatButton(onPressed: () {}, child: Text(cUser["point"].toString()))
           ],
         ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //     type: BottomNavigationBarType.fixed,
+        //     selectedItemColor: Colors.amber[800],
+        //     iconSize: 30,
+        //     currentIndex: _currentIndex,
+        //     onTap: _onItemTap,
+        //     items: bnb),
         body: TabBarView(
           children: [
             Container(
@@ -131,8 +156,8 @@ class _MyHomePageState extends State<GiftPage> {
                         child: Container(
                           width: double.infinity,
                           color: Color(0xFFF1771A),
-                          child: Image.network('http://18.140.255.41:3000' +
-                              cJson[index]["urlimg"].toString()),
+                          child: Image.network(
+                              hostname + cJson[index]["urlimg"].toString()),
                         ),
                       ),
                     ),

@@ -30,9 +30,7 @@ var cComment = [];
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<CommentPage> {
-  int slogin;
   int user_id;
-
   bool f = false;
   bool l = false;
 

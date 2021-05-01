@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
@@ -13,6 +14,7 @@ import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/userPage.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'giftPage.dart';
 
@@ -38,6 +40,10 @@ class _MyStatefulWidgetState extends State<PlayPage> {
 
   bool f = false;
   bool l = false;
+
+  VlcPlayerController _videoPlayerController;
+
+  Future<void> initializePlayer() async {}
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -145,15 +151,18 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     }
   }
 
-  Future<void> like() async {
+  Future<void> like(r_user_id) async {
     if (l == false) {
       var request = http.Request(
-          'GET',
-          Uri.parse(hostname +
-              '/like?user_id=' +
-              user_id.toString() +
-              '&idcam=' +
-              widget.idcam));
+        'GET',
+        Uri.parse(hostname +
+            '/like?t_user_id=' +
+            user_id.toString() +
+            '&r_user_id=' +
+            r_user_id +
+            '&idcam=' +
+            widget.idcam),
+      );
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         getPlay(widget.idcam);
@@ -163,12 +172,15 @@ class _MyStatefulWidgetState extends State<PlayPage> {
       }
     } else if (l == true) {
       var request = http.Request(
-          'GET',
-          Uri.parse(hostname +
-              '/unlike?user_id=' +
-              user_id.toString() +
-              '&idcam=' +
-              widget.idcam));
+        'GET',
+        Uri.parse(hostname +
+            '/unlike?t_user_id=' +
+            user_id.toString() +
+            '&r_user_id=' +
+            r_user_id +
+            '&idcam=' +
+            widget.idcam),
+      );
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
         getPlay(widget.idcam);
@@ -183,7 +195,20 @@ class _MyStatefulWidgetState extends State<PlayPage> {
   void initState() {
     super.initState();
     ch();
+    _videoPlayerController = VlcPlayerController.network(
+      'http://192.168.2.14:8000/live/ipcam.flv',
+      hwAcc: HwAcc.FULL,
+      autoPlay: true,
+      options: VlcPlayerOptions(),
+    );
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -227,23 +252,12 @@ class _MyStatefulWidgetState extends State<PlayPage> {
       body: SafeArea(
         child: Column(
           children: [
-            /*
             Container(
+              height: 300,
               child: VlcPlayer(
                 controller: _videoPlayerController,
                 aspectRatio: 16 / 9,
                 placeholder: Center(child: CircularProgressIndicator()),
-              ),
-            ),
-             */
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(50),
-              color: Colors.blue,
-              child: Icon(
-                Icons.play_circle_outline_outlined,
-                color: Colors.white,
-                size: 150,
               ),
             ),
             Container(
@@ -282,7 +296,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                               FlatButton(
                                 textColor: Colors.black,
                                 onPressed: () {
-                                  like();
+                                  like(cJson["user_id"].toString());
                                 },
                                 child: Row(
                                   children: [

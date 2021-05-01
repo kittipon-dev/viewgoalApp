@@ -1,11 +1,22 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:location/location.dart';
 import 'package:viewgoal/config.dart';
-import 'package:viewgoal/screens/mePage.dart';
+
+import 'package:flutter/material.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_map_location_picker/generated/l10n.dart'
+    as location_picker;
+
+import 'generated/i18n.dart';
 
 class AddCameraPage extends StatefulWidget {
   AddCameraPage({Key key, this.id}) : super(key: key);
@@ -18,19 +29,8 @@ class AddCameraPage extends StatefulWidget {
 
 class _MyHomePageState extends State<AddCameraPage> {
   final _formAdd = GlobalKey<FormState>();
-
-  /*
   LocationResult _pickedLocation;
-
-
-  LatLng _initialcameraposition = LatLng(13.7650836, 100.537966);
-  GoogleMapController _controller;
-
-  void _onMapCreated(GoogleMapController _cntlr) {
-    _controller = _cntlr;
-  }
-
-   */
+  var apiKey = 'AIzaSyCajUyewBDJdocFXJeXIHIdbmUrB3j5BqY';
   final _title = TextEditingController();
   final _urlrtsp = TextEditingController();
   final _namecity = TextEditingController();
@@ -43,6 +43,8 @@ class _MyHomePageState extends State<AddCameraPage> {
 
   Future<void> _save() async {
     if (_formAdd.currentState.validate()) {
+      _lat = _pickedLocation.latLng.latitude.toString();
+      _long = _pickedLocation.latLng.longitude.toString();
       final http.Response response = await http.post(
         Uri.parse(hostname + '/addcamera'),
         headers: <String, String>{
@@ -65,6 +67,13 @@ class _MyHomePageState extends State<AddCameraPage> {
         Navigator.pop(context);
       }
     }
+  }
+
+  Completer<GoogleMapController> _controller = Completer();
+  List<Marker> _marker = [];
+
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
 
   @override
@@ -101,7 +110,7 @@ class _MyHomePageState extends State<AddCameraPage> {
                       TextFormField(
                         controller: _title,
                         validator: (value) =>
-                            value.isEmpty ? 'Input cannot be empty!' : null,
+                            value.isEmpty ? 'กรุณากรอกข้อมูลให้ครบถ้วน' : null,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                         ),
@@ -124,55 +133,13 @@ class _MyHomePageState extends State<AddCameraPage> {
                       TextFormField(
                         controller: _urlrtsp,
                         validator: (value) =>
-                            value.isEmpty ? 'Input cannot be empty!' : null,
+                            value.isEmpty ? 'กรุณากรอกข้อมูลให้ครบถ้วน' : null,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'user:password@domian',
                         ),
                       ),
                     ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 5),
-                  child: RaisedButton(
-                    onPressed: () async {
-                      /*
-                      LocationResult result = await showLocationPicker(
-                        context, "AIzaSyCWtedlwiDnC1gSiVs3RHCf6CVrnpxPl4Q",
-                        initialCenter: LatLng(31.1975844, 29.9598339),
-//                      automaticallyAnimateToCurrentLocation: true,
-//                      mapStylePath: 'assets/mapStyle.json',
-                        myLocationButtonEnabled: true,
-                        // requiredGPS: true,
-                        layersButtonEnabled: true,
-                        // countries: ['AE', 'NG']
-
-//                      resultCardAlignment: Alignment.bottomCenter,
-                        desiredAccuracy: LocationAccuracy.best,
-                      );
-                      print("result = $result");
-                      setState(() => _pickedLocation = result);
-                      */
-                    },
-                    child: Text('Pick location GPS'),
-                  ),
-                ),
-                Container(
-                  child: TextFormField(
-                    controller: _namecity,
-                    validator: (value) =>
-                        value.isEmpty ? 'Input cannot be empty!' : null,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'name city',
-                    ),
-                  ),
-                ),
-                Container(
-                  child: Text(
-                    'GPS   ',
-                    style: TextStyle(fontSize: 15),
                   ),
                 ),
                 Container(
@@ -222,6 +189,9 @@ class _MyHomePageState extends State<AddCameraPage> {
                           children: [
                             Container(
                               width: 150,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black54),
+                              ),
                               child: DateTimePicker(
                                 type: DateTimePickerType.time,
                                 initialValue: '',
@@ -229,7 +199,7 @@ class _MyHomePageState extends State<AddCameraPage> {
                                 onChanged: (val) => _timestart = val,
                                 validator: (value) =>
                                     value.isEmpty && _isChecked2 == true
-                                        ? 'Input cannot be empty!'
+                                        ? 'กรุณากรอกข้อมูลให้ครบถ้วน'
                                         : null,
                                 onSaved: (val) => print(val),
                               ),
@@ -237,6 +207,9 @@ class _MyHomePageState extends State<AddCameraPage> {
                             Text("-"),
                             Container(
                               width: 150,
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.black54),
+                              ),
                               child: DateTimePicker(
                                 type: DateTimePickerType.time,
                                 initialValue: '',
@@ -244,7 +217,7 @@ class _MyHomePageState extends State<AddCameraPage> {
                                 onChanged: (val) => _timestop = val,
                                 validator: (value) =>
                                     value.isEmpty && _isChecked2 == true
-                                        ? 'Input cannot be empty!'
+                                        ? 'กรุณากรอกข้อมูลให้ครบถ้วน'
                                         : null,
                                 onSaved: (val) => print(val),
                               ),
@@ -256,6 +229,87 @@ class _MyHomePageState extends State<AddCameraPage> {
                   ),
                 ),
                 Container(
+                  margin: EdgeInsets.only(top: 10),
+                  width: 500,
+                  height: 200,
+                  child: GoogleMap(
+                    myLocationEnabled: true,
+                    mapType: MapType.normal,
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(13.736717, 100.523186), zoom: 15),
+                    onMapCreated: _onMapCreated,
+                    markers: Set.from(_marker),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: RaisedButton(
+                    onPressed: () async {
+                      LocationResult result =
+                          await showLocationPicker(context, apiKey,
+                              automaticallyAnimateToCurrentLocation: true,
+//                      mapStylePath: 'assets/mapStyle.json',
+                              myLocationButtonEnabled: true,
+                              // requiredGPS: true,
+                              //layersButtonEnabled: true,
+                              countries: ['TH'],
+                              resultCardAlignment: Alignment.bottomCenter,
+                              language: 'TH');
+                      _pickedLocation = result;
+                      _marker.add(
+                        Marker(
+                          markerId: MarkerId("1"),
+                          position: _pickedLocation.latLng,
+                        ),
+                      );
+                      final GoogleMapController controller =
+                          await _controller.future;
+                      controller.animateCamera(
+                          CameraUpdate.newLatLng(_pickedLocation.latLng));
+                      setState(() {});
+                    },
+                    child: Text('Pick location'),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    'Location',
+                    style: TextStyle(fontSize: 21),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    _pickedLocation != null
+                        ? 'Lat: ' + _pickedLocation.latLng.latitude.toString()
+                        : "",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 5),
+                  child: Text(
+                    _pickedLocation != null
+                        ? 'Long: ' + _pickedLocation.latLng.longitude.toString()
+                        : "",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 15),
+                  child: TextFormField(
+                    controller: _namecity,
+                    validator: (value) =>
+                        value.isEmpty ? 'กรุณากรอกข้อมูลให้ครบถ้วน' : null,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'จังหวัด',
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 15),
                   child: RaisedButton(
                     color: Color(0xFFF1771A),
                     onPressed: () {

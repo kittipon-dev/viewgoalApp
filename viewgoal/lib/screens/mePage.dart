@@ -22,8 +22,9 @@ var req = {};
 var myME = {};
 
 var cSave = [];
+var namecSave = [];
 var cFollowing = [];
-
+var namecFollowing = [];
 class MePage extends StatefulWidget {
   MePage({Key key}) : super(key: key);
 
@@ -44,7 +45,7 @@ class _MyStatefulWidgetState extends State<MePage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = await prefs.get('user_id');
     if (user_id > 0) {
-      getMe(user_id.toString());
+      getMe();
     } else {
       Navigator.push(
         context,
@@ -55,31 +56,42 @@ class _MyStatefulWidgetState extends State<MePage> {
     }
   }
 
-  Future<void> getMe(id) async {
-    var request =
-        await http.Request('GET', Uri.parse(hostname + '/me?user_id=' + id));
+  Future<void> getMe() async {
+    var request = await http.Request(
+        'GET', Uri.parse(hostname + '/me?user_id=' + user_id.toString()));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
 
       req = jsonDecode(receivedJson);
+
       myME = req["user"];
       cJson = req["camera"];
 
       cSave = myME["favorite"];
       cFollowing = myME["following"];
+      getNameCame();
+      getName();
       for (var i = 0; i < myME["likeme"].length; i++) {
         likeme++;
       }
       for (var i = 0; i < myME["followers"].length; i++) {
         followers++;
       }
+
 /*
       list = await json.decode(receivedJson);
       cJson = await list[1];
        */
-      img = NetworkImage(hostname + '/images-profile/${id}.png');
+      img =
+          NetworkImage(hostname + '/images-profile/${user_id.toString()}.png');
       setState(() {});
+    } else if (response.statusCode == 401) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt('user_id', 0);
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => LoginPage()),
+          (Route<dynamic> route) => false);
     }
   }
 
@@ -89,7 +101,7 @@ class _MyStatefulWidgetState extends State<MePage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       setState(() {
-        getMe(user_id.toString());
+        getMe();
       });
     }
   }
@@ -100,7 +112,7 @@ class _MyStatefulWidgetState extends State<MePage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       setState(() {
-        getMe(user_id.toString());
+        getMe();
       });
     }
   }
@@ -111,8 +123,42 @@ class _MyStatefulWidgetState extends State<MePage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       setState(() {
-        getMe(user_id.toString());
+        getMe();
       });
+    }
+  }
+
+
+
+
+  Future<String> getNameCame() async {
+    final http.Response response = await http.post(
+      Uri.parse(hostname + '/getnamecam/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(cSave),
+    );
+
+    if (response.statusCode == 200) {
+      String receivedJson = await response.body.toString();
+      namecSave = jsonDecode(receivedJson);
+      print(namecSave);
+    }
+  }
+  Future<String> getName() async {
+    final http.Response response = await http.post(
+      Uri.parse(hostname + '/getname/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(cFollowing),
+    );
+
+    if (response.statusCode == 200) {
+      String receivedJson = await response.body.toString();
+      namecFollowing = jsonDecode(receivedJson);
+      print(namecFollowing);
     }
   }
 
@@ -121,6 +167,24 @@ class _MyStatefulWidgetState extends State<MePage> {
     super.initState();
     ch();
   }
+
+  // int _currentIndex = 4;
+  // List<Widget> _widgetOptions = <Widget>[
+  //   HomePage(),
+  //   MapPage(),
+  //   InboxPage(),
+  //   GiftPage(),
+  //   MePage(),
+  // ];
+  // void _onItemTap(int index) {
+  //   setState(() {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
+  //     );
+  //     _currentIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +218,13 @@ class _MyStatefulWidgetState extends State<MePage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //     type: BottomNavigationBarType.fixed,
+      //     selectedItemColor: Colors.amber[800],
+      //     iconSize: 30,
+      //     currentIndex: _currentIndex,
+      //     onTap: _onItemTap,
+      //     items: bnb),
       body: SafeArea(
         child: Column(
           children: [
@@ -172,7 +243,9 @@ class _MyStatefulWidgetState extends State<MePage> {
                               myme: myME,
                             ),
                           ),
-                        );
+                        ).then((_) {
+                          getMe();
+                        });
                       },
                       child: CircleAvatar(
                         backgroundImage: img,
@@ -259,7 +332,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                           ),
                           Tab(
                             child: Text(
-                              "Following",
+                              "Follow",
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
@@ -316,26 +389,23 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         PlayPage(
-                                                            idcam: cJson[
-                                                            index]
-                                                            ["_id"])),
+                                                            idcam: cJson[index]
+                                                                ["_id"])),
                                               );
                                             },
                                             child: Container(
                                               child: Card(
                                                 child: Row(
                                                   crossAxisAlignment:
-                                                  CrossAxisAlignment
-                                                      .start,
+                                                      CrossAxisAlignment.start,
                                                   mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
                                                     Container(
                                                       width: 150,
                                                       height: 100,
-                                                      color:
-                                                      Color(0xFFF1771A),
+                                                      color: Color(0xFFF1771A),
                                                       child: Icon(
                                                         Icons
                                                             .play_circle_outline_outlined,
@@ -348,11 +418,11 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                       height: 100,
                                                       child: Column(
                                                         crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceAround,
+                                                            MainAxisAlignment
+                                                                .spaceAround,
                                                         children: [
                                                           Container(
                                                             child: Text(
@@ -365,12 +435,12 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                            */
                                                           Container(
                                                             padding:
-                                                            EdgeInsets
-                                                                .all(1),
+                                                                EdgeInsets.all(
+                                                                    1),
                                                             child: Text(
                                                               cJson[index][
-                                                              'status'] ==
-                                                                  true
+                                                                          'status'] ==
+                                                                      true
                                                                   ? 'playing...'
                                                                   : 'stop',
                                                               style: TextStyle(
@@ -388,17 +458,16 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                           if (result == 1) {
                                                             startcam(
                                                                 cJson[index]
-                                                                ["_id"]);
+                                                                    ["_id"]);
                                                           } else if (result ==
                                                               2) {
-                                                            stopcam(
-                                                                cJson[index]
+                                                            stopcam(cJson[index]
                                                                 ["_id"]);
                                                           } else if (result ==
                                                               3) {
                                                             removedcam(
                                                                 cJson[index]
-                                                                ["_id"]);
+                                                                    ["_id"]);
                                                           }
                                                         },
                                                         itemBuilder:
@@ -406,17 +475,16 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                           PopupMenuItem(
                                                             value: 1,
                                                             child:
-                                                            Text("Start"),
+                                                                Text("Start"),
                                                           ),
                                                           PopupMenuItem(
                                                             value: 2,
-                                                            child:
-                                                            Text("Stop"),
+                                                            child: Text("Stop"),
                                                           ),
                                                           PopupMenuItem(
                                                             value: 3,
-                                                            child: Text(
-                                                                "Removed"),
+                                                            child:
+                                                                Text("Removed"),
                                                           ),
                                                         ],
                                                       ),
@@ -468,7 +536,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    child: Text(""),
+                                                    child: Text(namecSave[index]),
                                                   ),
                                                   Container(
                                                     margin: EdgeInsets.only(
@@ -566,9 +634,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    child: Text(
-                                                        cFollowing[index]
-                                                            .toString()),
+                                                    child: Text(namecFollowing[index]),
                                                   ),
                                                   Container(
                                                     margin: EdgeInsets.only(

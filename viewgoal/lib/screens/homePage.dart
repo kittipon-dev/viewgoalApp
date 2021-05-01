@@ -19,15 +19,15 @@ var cJson = [];
 var cJsonF = [];
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
-
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> {
   int user_id;
 
+  RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -64,91 +64,37 @@ class _MyHomePageState extends State<HomePage> {
     //print(chLogin);
   }
 
-  int _currentIndex = 0;
-
-  List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    MapPage(),
-    InboxPage(),
-    GiftPage(),
-    MePage(),
-  ];
-
-  void _onItemTap(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: _widgetOptions.elementAt(_currentIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.amber[800],
-        iconSize: 30,
-        currentIndex: _currentIndex,
-        onTap: _onItemTap,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: "Map",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.inbox),
-            label: "Inbox",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.card_giftcard),
-            label: "Gift",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: "Me",
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-
-  List<String> items = ["1", "2", "3", "4", "5", "6", "7", "8"];
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
-
-  void _onRefresh() async{
-    // monitor network fetch
+  void _onRefresh() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use refreshFailed()
-    print("OnRef");
+    ch();
+    setState(() {});
     _refreshController.refreshCompleted();
   }
 
-  void _onLoading() async{
-    // monitor network fetch
+  void _onLoading() async {
     await Future.delayed(Duration(milliseconds: 1000));
-    // if failed,use loadFailed(),if no data return,use LoadNodata()
-    items.add((items.length+1).toString());
-    print("OnLoad");
-    if(mounted)
-      setState(() {
-
-      });
+    ch();
+    setState(() {});
     _refreshController.loadComplete();
   }
+
+  // int _currentIndex = 0;
+  // List<Widget> _widgetOptions = <Widget>[
+  //   HomePage(),
+  //   MapPage(),
+  //   InboxPage(),
+  //   GiftPage(),
+  //   MePage(),
+  // ];
+  // void _onItemTap(int index) {
+  //   setState(() {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
+  //     );
+  //     _currentIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -178,6 +124,13 @@ class _HomeState extends State<Home> {
             FlatButton(onPressed: () {}, child: Icon(Icons.search_rounded))
           ],
         ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //     type: BottomNavigationBarType.fixed,
+        //     selectedItemColor: Colors.amber[800],
+        //     iconSize: 30,
+        //     currentIndex: _currentIndex,
+        //     onTap: _onItemTap,
+        //     items: bnb),
         body: TabBarView(
           children: [
             SmartRefresher(
@@ -185,26 +138,22 @@ class _HomeState extends State<Home> {
               enablePullUp: true,
               header: WaterDropHeader(),
               footer: CustomFooter(
-                builder: (BuildContext context,LoadStatus mode){
-                  Widget body ;
-                  if(mode==LoadStatus.idle){
-                    body =  Text("pull up load");
-                  }
-                  else if(mode==LoadStatus.loading){
-                    body =  CupertinoActivityIndicator();
-                  }
-                  else if(mode == LoadStatus.failed){
+                builder: (BuildContext context, LoadStatus mode) {
+                  Widget body;
+                  if (mode == LoadStatus.idle) {
+                    body = Text(" ");
+                  } else if (mode == LoadStatus.loading) {
+                    body = CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
                     body = Text("Load Failed!Click retry!");
-                  }
-                  else if(mode == LoadStatus.canLoading){
+                  } else if (mode == LoadStatus.canLoading) {
                     body = Text("release to load more");
-                  }
-                  else{
+                  } else {
                     body = Text("No more Data");
                   }
                   return Container(
                     height: 55.0,
-                    child: Center(child:body),
+                    child: Center(child: body),
                   );
                 },
               ),

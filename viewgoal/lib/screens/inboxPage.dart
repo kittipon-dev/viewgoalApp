@@ -6,43 +6,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/config.dart';
 import 'package:viewgoal/menu_bar.dart';
+import 'package:viewgoal/screens/commentPage.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'dart:async';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
+import 'package:viewgoal/screens/playPage.dart';
+import 'package:viewgoal/screens/userPage.dart';
 
 import 'giftPage.dart';
 import 'sendmessagePage.dart';
 
 var cJsonM = [];
+var listNameM = [];
+var nameM = [];
 
-var cJsonN = [
-  {
-    "img":
-        'https://img2.thaipng.com/20180501/stw/kisspng-wireless-security-camera-closed-circuit-television-5ae92ebc8b11e7.1893454715252312925696.jpg',
-    "topic": "มีการแสดงความคิดเห็นใหม่",
-    "txt": "aaaaaaaaaaaaaaa"
-  },
-  {
-    "img":
-        'https://img2.thaipng.com/20180501/stw/kisspng-wireless-security-camera-closed-circuit-television-5ae92ebc8b11e7.1893454715252312925696.jpg',
-    "topic": "มีถูกใจกล้องของคุณ",
-    "txt": ""
-  },
-  {
-    "img":
-        'https://flyerbonus.bangkokair.com/images/icons/icon-how-to-add-points.png',
-    "topic": "คุณได้รับรางวัล",
-    "txt": "ได้รับ point 50"
-  },
-  {
-    "img":
-        'https://e7.pngegg.com/pngimages/305/201/png-clipart-computer-icons-expiration-date-angle-text-thumbnail.png',
-    "topic": "ยอดวันใกล้ใช้งานของคุณใกล้จะหมด",
-    "txt": "การใช้งานสินสุดวันที่ 12/12/2022"
-  }
-];
+var cJsonN = [];
+var listNameN = [];
+var nameN = [];
 
 class InboxPage extends StatefulWidget {
   InboxPage({Key key, this.title}) : super(key: key);
@@ -55,12 +37,13 @@ class InboxPage extends StatefulWidget {
 
 class _MyHomePageState extends State<InboxPage> {
   int user_id;
+  String name;
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id = await prefs.get('user_id');
     if (user_id > 0) {
-      getMes();
+      allget();
     } else {
       Navigator.push(
         context,
@@ -71,6 +54,16 @@ class _MyHomePageState extends State<InboxPage> {
     }
   }
 
+  Future<void> allget() async {
+    await getNotifi();
+    await getMes();
+    await getNameN();
+    await getNameM();
+    print(nameM);
+    print(nameN);
+    setState(() {});
+  }
+
   Future<void> getMes() async {
     var request = await http.Request('GET',
         Uri.parse(hostname + '/get_mesAll?user_id=' + user_id.toString()));
@@ -78,18 +71,55 @@ class _MyHomePageState extends State<InboxPage> {
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       cJsonM = jsonDecode(receivedJson);
+      listNameM.clear();
+      for (int i = 0; i < cJsonM.length; i++) {
+        listNameM.add(cJsonM[i]["user_id_2"]);
+      }
     }
   }
 
-  Future<String> getName(id) async {
-    var request = await http.Request(
-        'GET', Uri.parse(hostname + '/getname?user_id=' + id.toString()));
+  Future<void> getNotifi() async {
+    var request = await http.Request('GET',
+        Uri.parse(hostname + '/get_notifi?user_id=' + user_id.toString()));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
-      return receivedJson;
+      cJsonN = jsonDecode(receivedJson);
+      listNameN.clear();
+      for (int i = 0; i < cJsonN.length; i++) {
+        listNameN.add(cJsonN[i]["t_user_id"]);
+      }
     }
-    return "asd";
+  }
+
+  Future<String> getNameN() async {
+    final http.Response response = await http.post(
+      Uri.parse(hostname + '/getname/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(listNameN),
+    );
+
+    if (response.statusCode == 200) {
+      String receivedJson = await response.body.toString();
+      nameN = jsonDecode(receivedJson);
+    }
+  }
+
+  Future<String> getNameM() async {
+    final http.Response response = await http.post(
+      Uri.parse(hostname + '/getname/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(listNameM),
+    );
+
+    if (response.statusCode == 200) {
+      String receivedJson = await response.body.toString();
+      nameM = jsonDecode(receivedJson);
+    }
   }
 
   @override
@@ -97,6 +127,24 @@ class _MyHomePageState extends State<InboxPage> {
     super.initState();
     ch();
   }
+
+  // int _currentIndex = 2;
+  // List<Widget> _widgetOptions = <Widget>[
+  //   HomePage(),
+  //   MapPage(),
+  //   InboxPage(),
+  //   GiftPage(),
+  //   MePage(),
+  // ];
+  // void _onItemTap(int index) {
+  //   setState(() {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
+  //     );
+  //     _currentIndex = index;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -126,22 +174,18 @@ class _MyHomePageState extends State<InboxPage> {
             ],
           ),
         ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //     type: BottomNavigationBarType.fixed,
+        //     selectedItemColor: Colors.amber[800],
+        //     iconSize: 30,
+        //     currentIndex: _currentIndex,
+        //     onTap: _onItemTap,
+        //     items: bnb),
         body: SafeArea(
           child: TabBarView(
             children: [
               Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Notification",
-                        style:
-                            TextStyle(color: Color(0xFFF1771A), fontSize: 20),
-                      ),
-                      Icon(Icons.search_rounded)
-                    ],
-                  ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: cJsonN.length,
@@ -149,23 +193,50 @@ class _MyHomePageState extends State<InboxPage> {
                         return Container(
                           child: FlatButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SendMessagePage()),
-                              );
+                              if (cJsonN[index]["type"] == "like") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => PlayPage(
+                                      idcam: cJsonN[index]["refid"],
+                                    ),
+                                  ),
+                                );
+                              } else if (cJsonN[index]["type"] == "comment") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CommentPage(
+                                      idcam: cJsonN[index]["refid"],
+                                    ),
+                                  ),
+                                );
+                              } else if (cJsonN[index]["type"] == "follow") {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => UserPage(
+                                      userid: cJsonN[index]["t_user_id"],
+                                    ),
+                                  ),
+                                );
+                              } else {}
                             },
                             child: Card(
                               child: Container(
-                                height: 70,
                                 child: Row(
                                   children: [
                                     Container(
                                       margin: EdgeInsets.only(left: 10, top: 5),
-                                      child: CircleAvatar(
-                                        backgroundImage:
-                                            NetworkImage(cJsonN[index]["img"]),
-                                      ),
+                                      child: Icon(cJsonN[index]["type"] ==
+                                              "like"
+                                          ? Icons.favorite_outline
+                                          : cJsonN[index]["type"] == "comment"
+                                              ? Icons.comment_outlined
+                                              : cJsonN[index]["type"] ==
+                                                      "follow"
+                                                  ? Icons.add
+                                                  : Icons.android_outlined),
                                     ),
                                     Column(
                                       mainAxisAlignment:
@@ -176,13 +247,22 @@ class _MyHomePageState extends State<InboxPage> {
                                         Container(
                                           margin:
                                               EdgeInsets.only(left: 10, top: 5),
-                                          child: Text(cJsonN[index]["topic"]),
+                                          child: Text(cJsonN[index]["type"]),
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(
                                               left: 10, top: 10),
                                           child: Text(
-                                            cJsonN[index]["txt"],
+                                            nameN[index],
+                                            style: TextStyle(
+                                                color: Colors.black54),
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(
+                                              left: 10, top: 10),
+                                          child: Text(
+                                            cJsonN[index]["refid"] ?? "",
                                             style: TextStyle(
                                                 color: Colors.black54),
                                           ),
@@ -202,17 +282,6 @@ class _MyHomePageState extends State<InboxPage> {
               ),
               Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Massages",
-                        style:
-                            TextStyle(color: Color(0xFFF1771A), fontSize: 20),
-                      ),
-                      Icon(Icons.search_rounded)
-                    ],
-                  ),
                   Expanded(
                     child: ListView.builder(
                       itemCount: cJsonM.length,
@@ -225,7 +294,7 @@ class _MyHomePageState extends State<InboxPage> {
                                 MaterialPageRoute(
                                   builder: (context) => SendMessagePage(
                                     ruserid:
-                                        cJsonM[index]["r_user_id"].toString(),
+                                        cJsonM[index]["user_id_2"].toString(),
                                   ),
                                 ),
                               );
@@ -239,7 +308,7 @@ class _MyHomePageState extends State<InboxPage> {
                                       margin: EdgeInsets.only(left: 10, top: 5),
                                       child: CircleAvatar(
                                         backgroundImage: NetworkImage(hostname +
-                                            '/images-profile/null.png'),
+                                            '/images-profile/${cJsonM[index]["user_id_2"]}.png'),
                                       ),
                                     ),
                                     Column(
@@ -251,19 +320,8 @@ class _MyHomePageState extends State<InboxPage> {
                                         Container(
                                           margin:
                                               EdgeInsets.only(left: 10, top: 5),
-                                          child: Text(cJsonM[index]["r_user_id"].toString()),
+                                          child: Text(nameM[index]),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 10, top: 10),
-                                          child: Text(
-                                            cJsonM[index]["mes"][
-                                                cJsonM[index]["mes"].length -
-                                                    1]["mes"],
-                                            style: TextStyle(
-                                                color: Colors.black54),
-                                          ),
-                                        )
                                       ],
                                     ),
                                   ],
