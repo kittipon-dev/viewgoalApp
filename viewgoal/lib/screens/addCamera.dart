@@ -43,28 +43,35 @@ class _MyHomePageState extends State<AddCameraPage> {
 
   Future<void> _save() async {
     if (_formAdd.currentState.validate()) {
-      _lat = _pickedLocation.latLng.latitude.toString();
-      _long = _pickedLocation.latLng.longitude.toString();
-      final http.Response response = await http.post(
-        Uri.parse(hostname + '/addcamera'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(<String, String>{
-          'user_id': widget.id,
-          'title': _title.text,
-          'url': _urlrtsp.text,
-          'l_name': _namecity.text,
-          'l_lat': _lat,
-          'l_long': _long,
-          't_s': '1',
-          't_start': _timestart,
-          't_stop': _timestop
-        }),
-      );
+      if (_pickedLocation != null) {
+        _lat = _pickedLocation.latLng.latitude.toString();
+        _long = _pickedLocation.latLng.longitude.toString();
+        final http.Response response = await http.post(
+          Uri.parse(hostname + '/addcamera'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'user_id': widget.id,
+            'title': _title.text,
+            'url': _urlrtsp.text,
+            'l_name': _namecity.text,
+            'l_lat': _lat,
+            'l_long': _long,
+            't_s': '1',
+            't_start': _timestart,
+            't_stop': _timestop
+          }),
+        );
 
-      if (response.statusCode == 200) {
-        Navigator.pop(context);
+        if (response.statusCode == 200) {
+          Navigator.pop(context);
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('กรุณาเลือกตำแหน่งที่ตั้งของกล้อง'),
+          duration: const Duration(seconds: 1),
+        ));
       }
     }
   }
@@ -304,7 +311,7 @@ class _MyHomePageState extends State<AddCameraPage> {
                         value.isEmpty ? 'กรุณากรอกข้อมูลให้ครบถ้วน' : null,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      labelText: 'จังหวัด',
+                      labelText: 'TAG #มะม่วง #มะพร้าว',
                     ),
                   ),
                 ),

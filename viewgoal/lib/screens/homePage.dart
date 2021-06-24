@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_search_bar/flutter_search_bar.dart';
 import 'package:http/http.dart' as http;
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +10,7 @@ import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/mapPage.dart';
 import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/playPage.dart';
+import 'package:viewgoal/screens/userPage.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -50,7 +52,21 @@ class _HomePageState extends State<HomePage> {
       var req = {};
       req = jsonDecode(receivedJson);
       cJson = req["listplay"];
-      cJsonF = req["favorite"];
+      cJsonF = req["listSave"];
+      //print(cJsonF);
+      setState(() {});
+    } else {
+      //print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> listplayingS(id, text) async {
+    var request = http.Request(
+        'GET', Uri.parse(hostname + '/listS?user_id=' + id + '&text=' + text));
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      String receivedJson = await response.stream.bytesToString();
+      cJson = jsonDecode(receivedJson);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -78,59 +94,63 @@ class _HomePageState extends State<HomePage> {
     _refreshController.loadComplete();
   }
 
-  // int _currentIndex = 0;
-  // List<Widget> _widgetOptions = <Widget>[
-  //   HomePage(),
-  //   MapPage(),
-  //   InboxPage(),
-  //   GiftPage(),
-  //   MePage(),
-  // ];
-  // void _onItemTap(int index) {
-  //   setState(() {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
-  //     );
-  //     _currentIndex = index;
-  //   });
-  // }
+  SearchBar searchBar;
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  AppBar buildAppBar(BuildContext context) {
+    return new AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      title: TabBar(
+        tabs: [
+          Tab(
+            child: Text(
+              "Hot",
+              style: TextStyle(color: Color(0xFFF1771A)),
+            ),
+          ),
+          Tab(
+            child: Text(
+              "Save",
+              style: TextStyle(color: Color(0xFFF1771A)),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        Container(
+          child: searchBar.getSearchAction(context),
+          color: Color(0xFFF1771A),
+        )
+      ],
+    );
+  }
+
+  void onSubmitted(String value) {
+    listplayingS(user_id.toString(), value);
+  }
+
+  _HomePageState() {
+    searchBar = new SearchBar(
+        inBar: false,
+        buildDefaultAppBar: buildAppBar,
+        setState: setState,
+        onSubmitted: onSubmitted,
+        onCleared: () {
+          //print("cleared");
+        },
+        onClosed: () {
+          //print("closed");
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          title: TabBar(
-            tabs: [
-              Tab(
-                child: Text(
-                  "Hot",
-                  style: TextStyle(color: Color(0xFFF1771A)),
-                ),
-              ),
-              Tab(
-                child: Text(
-                  "Save",
-                  style: TextStyle(color: Color(0xFFF1771A)),
-                ),
-              ),
-            ],
-          ),
-          actions: [
-            FlatButton(onPressed: () {}, child: Icon(Icons.search_rounded))
-          ],
-        ),
-        // bottomNavigationBar: BottomNavigationBar(
-        //     type: BottomNavigationBarType.fixed,
-        //     selectedItemColor: Colors.amber[800],
-        //     iconSize: 30,
-        //     currentIndex: _currentIndex,
-        //     onTap: _onItemTap,
-        //     items: bnb),
+        appBar: searchBar.build(context),
+        key: _scaffoldKey,
         body: TabBarView(
           children: [
             SmartRefresher(
@@ -180,26 +200,33 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 200,
                               color: Color(0xFFF1771A),
-                              child: Icon(
-                                Icons.play_circle_outline_outlined,
-                                color: Colors.white,
-                                size: 150,
-                              ),
+                              child: Image.network(hostname +
+                                  '/imageVideo/' +
+                                  cJson[index]["_id"] +
+                                  '.jpg'),
                             ),
                             Container(
                               child: Row(
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50.00),
-                                    child: Image.network(
-                                      hostname +
-                                          "/images-profile/" +
-                                          cJson[index]["user_id"].toString() +
-                                          ".png",
-                                      width: 40,
+                                  CircleAvatar(
+                                    child: FlatButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => UserPage(
+                                                  userid: cJson[index]
+                                                          ["user_id"]
+                                                      .toString())),
+                                        );
+                                      },
                                     ),
+                                    backgroundImage: NetworkImage(hostname +
+                                        "/images-profile/" +
+                                        cJson[index]["user_id"].toString() +
+                                        ".png"),
+                                    radius: 30,
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(left: 10),
@@ -214,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
-                                          child: Text("city: " +
+                                          child: Text("TAG: " +
                                               cJson[index]['location']['name']),
                                         ),
                                         Container(
@@ -251,7 +278,33 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            Container(
+            SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              header: WaterDropHeader(),
+              footer: CustomFooter(
+                builder: (BuildContext context, LoadStatus mode) {
+                  Widget body;
+                  if (mode == LoadStatus.idle) {
+                    body = Text(" ");
+                  } else if (mode == LoadStatus.loading) {
+                    body = CupertinoActivityIndicator();
+                  } else if (mode == LoadStatus.failed) {
+                    body = Text("Load Failed!Click retry!");
+                  } else if (mode == LoadStatus.canLoading) {
+                    body = Text("release to load more");
+                  } else {
+                    body = Text("No more Data");
+                  }
+                  return Container(
+                    height: 55.0,
+                    child: Center(child: body),
+                  );
+                },
+              ),
+              controller: _refreshController,
+              onRefresh: _onRefresh,
+              onLoading: _onLoading,
               child: ListView.builder(
                 itemCount: cJsonF.length,
                 itemBuilder: (context, index) {
@@ -261,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                PlayPage(idcam: cJsonF[index]["_id"])),
+                                PlayPage(idcam: cJsonF[index]["idcam"])),
                       );
                     },
                     child: Card(
@@ -272,64 +325,30 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               width: double.infinity,
-                              height: 200,
                               color: Color(0xFFF1771A),
-                              child: Icon(
-                                Icons.play_circle_outline_outlined,
-                                color: Colors.white,
-                                size: 150,
-                              ),
+                              child: Image.network(hostname +
+                                  '/imageVideo/' +
+                                  cJson[index]["_id"] +
+                                  '.jpg'),
                             ),
                             Container(
                               child: Row(
                                 children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(50.00),
-                                    child: Image.network(
-                                      hostname +
-                                          "/images-profile/" +
-                                          cJsonF[index]["user_id"].toString() +
-                                          ".png",
-                                      width: 40,
-                                    ),
-                                  ),
                                   Container(
                                     margin: EdgeInsets.only(left: 10),
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Container(
                                           margin: EdgeInsets.only(top: 3),
                                           child: Text("title: " +
-                                              cJsonF[index]['title']),
+                                              cJson[index]["title"].toString()),
                                         ),
-                                        Container(
+                                        /*Container(
                                           margin: EdgeInsets.only(top: 3),
-                                          child: Text("city: " +
-                                              cJsonF[index]['location']
-                                                  ['name']),
-                                        ),
-                                        Container(
-                                          margin: EdgeInsets.only(top: 5),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                  'view ${cJsonF[index]['view']}'),
-                                              Container(
-                                                margin:
-                                                    EdgeInsets.only(left: 50),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(Icons.favorite),
-                                                    Text(
-                                                        '${cJsonF[index]['like']}')
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                                          child: Text("city: "),
+                                        ),*/
                                       ],
                                     ),
                                   )

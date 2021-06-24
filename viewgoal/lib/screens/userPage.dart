@@ -31,7 +31,6 @@ class UserPage extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<UserPage> {
-
   int user_id;
   String urlimgprofile = hostname + '/images-profile/null.png';
 
@@ -57,8 +56,13 @@ class _MyStatefulWidgetState extends State<UserPage> {
   }
 
   Future<void> getUser(id) async {
-    var request =
-        await http.Request('GET', Uri.parse(hostname + '/user?user_id=' + id));
+    var request = await http.Request(
+        'GET',
+        Uri.parse(hostname +
+            '/user?user_id=' +
+            user_id.toString() +
+            '&f_user_id=' +
+            id));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
@@ -66,24 +70,11 @@ class _MyStatefulWidgetState extends State<UserPage> {
       req = jsonDecode(receivedJson);
       myME = req["user"];
       cJson = req["camera"];
-      for (var i = 0; i < myME["likeme"].length; i++) {
-        likeme++;
-        if (myME["likeme"][i].toString() == user_id.toString()) {
-          _isLike = true;
-        }
-      }
-      for (var i = 0; i < myME["followers"].length; i++) {
-        followers++;
-        if (myME["followers"][i].toString() == user_id.toString()) {
-          _isFollo = true;
-        }
-      }
 
-      //print(myME);
-/*
-      list = await json.decode(receivedJson);
-      cJson = await list[1];
-       */
+      _isFollo=req["sf"];
+      _isLike=req["sl"];
+
+
       urlimgprofile = hostname + '/images-profile/${id}.png';
       setState(() {});
     }
@@ -101,6 +92,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       _isFollo = true;
+      getUser(widget.userid);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -119,6 +111,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       _isFollo = false;
+      getUser(widget.userid);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -137,6 +130,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       _isLike = true;
+      getUser(widget.userid);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -155,6 +149,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       _isLike = false;
+      getUser(widget.userid);
       setState(() {});
     } else {
       //print(response.reasonPhrase);
@@ -281,7 +276,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                           width: 100,
                           child: Column(
                             children: [
-                              Text(followers.toString()),
+                              Text(myME["followers"].toString()),
                               Text("ผู้ติดตาม")
                             ],
                           ),
@@ -289,7 +284,7 @@ class _MyStatefulWidgetState extends State<UserPage> {
                         Container(
                           width: 100,
                           child: Column(
-                            children: [Text(likeme.toString()), Text("ถูกใจ")],
+                            children: [Text(myME["like"].toString()), Text("ถูกใจ")],
                           ),
                         ),
                       ],
@@ -302,8 +297,8 @@ class _MyStatefulWidgetState extends State<UserPage> {
               width: MediaQuery.of(context).size.width * 0.65,
               height: 60,
               margin: EdgeInsets.only(top: 5),
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+              /*decoration:
+                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),*/
               child: Text(
                 myME["note"] ?? "ข้อความ...",
                 style: TextStyle(fontSize: 12),
@@ -336,12 +331,11 @@ class _MyStatefulWidgetState extends State<UserPage> {
                               Container(
                                 width: 150,
                                 height: 100,
-                                color: Color(0xFFF1771A),
-                                child: Icon(
-                                  Icons.play_circle_outline_outlined,
-                                  color: Colors.white,
-                                  size: 50,
-                                ),
+                                child: Image.network(hostname +
+                                    
+                                    '/imageVideo/' +
+                                    cJson[index]["_id"] +
+                                    '.jpg'),
                               ),
                               Container(
                                 width: 100,

@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:viewgoal/dark_theme_provider.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/settings/About/community_guideliness.dart';
 import 'package:viewgoal/settings/About/copyright_policy.dart';
@@ -40,15 +43,17 @@ class _SettingsState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<DarkThemeProvider>(context);
+    bool _switchValue = themeProvider.darkTheme;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 1,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           leading: IconButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back, color: Color(0xff707070)),
+            icon: Icon(Icons.arrow_back),
           ),
           title: Text(
             'Settings and privacy',
@@ -62,15 +67,43 @@ class _SettingsState extends State<SettingsPage> {
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: ListView(
           children: [
-            Text(
+/*            Text(
               "ACCOUNT",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                   color: Color(0xffF1771A)),
-            ), //Account
+            ), //Account*/
             SizedBox(
               height: 14,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.lightbulb,
+                  size: 25,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  "Dark Mode Theme",
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                CupertinoSwitch(
+                  value: _switchValue,
+                  onChanged: (value) {
+                    themeProvider.darkTheme = value;
+                  },
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 20,
             ),
             GestureDetector(
               behavior: HitTestBehavior.translucent,
@@ -88,20 +121,23 @@ class _SettingsState extends State<SettingsPage> {
                   children: [
                     Icon(
                       Icons.person_outline,
-                      size: 27,
+                      size: 25,
                     ),
                     SizedBox(
-                      width: 8,
+                      width: 20,
                     ),
                     Text(
                       "Manage my account",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
               ),
             ), //Manage my account
-            GestureDetector(
+            SizedBox(
+              height: 20,
+            ),
+            /*GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 Navigator.push(
@@ -657,8 +693,8 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                 ),
               ),
-            ), //Free up space
-            GestureDetector(
+            ), //Free up space*/
+            /*GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
                 Navigator.push(
@@ -688,7 +724,7 @@ class _SettingsState extends State<SettingsPage> {
                   ),
                 ),
               ),
-            ), //Add account
+            ), //Add account*/
             GestureDetector(
               behavior: HitTestBehavior.translucent,
               onTap: () {
@@ -701,14 +737,14 @@ class _SettingsState extends State<SettingsPage> {
                     children: [
                       Icon(
                         MdiIcons.logout,
-                        size: 27,
+                        size: 25,
                       ),
                       SizedBox(
-                        width: 8,
+                        width: 20,
                       ),
                       Text(
                         "Log out",
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ],
                   ),
@@ -716,7 +752,7 @@ class _SettingsState extends State<SettingsPage> {
               ),
             ), //Log out
             SizedBox(
-              height: 380,
+              height: 300,
             ),
           ],
         ),

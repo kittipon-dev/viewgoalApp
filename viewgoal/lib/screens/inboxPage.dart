@@ -253,20 +253,9 @@ class _MyHomePageState extends State<InboxPage> {
                                           margin: EdgeInsets.only(
                                               left: 10, top: 10),
                                           child: Text(
-                                            nameN[index],
-                                            style: TextStyle(
-                                                color: Colors.black54),
+                                            nameN[index]
                                           ),
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(
-                                              left: 10, top: 10),
-                                          child: Text(
-                                            cJsonN[index]["refid"] ?? "",
-                                            style: TextStyle(
-                                                color: Colors.black54),
-                                          ),
-                                        )
                                       ],
                                     ),
                                   ],

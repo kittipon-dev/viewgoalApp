@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:viewgoal/dark_theme_provider.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/playPage.dart';
 import 'package:viewgoal/screens/settingsPage.dart';
 import 'package:viewgoal/screens/userPage.dart';
 import 'package:viewgoal/settings/Account/manage_profile.dart';
+import 'package:flutter/foundation.dart';
 
 import '../config.dart';
 import '../menu_bar.dart';
@@ -25,6 +28,7 @@ var cSave = [];
 var namecSave = [];
 var cFollowing = [];
 var namecFollowing = [];
+
 class MePage extends StatefulWidget {
   MePage({Key key}) : super(key: key);
 
@@ -67,17 +71,10 @@ class _MyStatefulWidgetState extends State<MePage> {
 
       myME = req["user"];
       cJson = req["camera"];
+      cSave = req["save"];
 
-      cSave = myME["favorite"];
-      cFollowing = myME["following"];
-      getNameCame();
-      getName();
-      for (var i = 0; i < myME["likeme"].length; i++) {
-        likeme++;
-      }
-      for (var i = 0; i < myME["followers"].length; i++) {
-        followers++;
-      }
+      cFollowing = req["following"];
+      print(cJson);
 
 /*
       list = await json.decode(receivedJson);
@@ -103,6 +100,11 @@ class _MyStatefulWidgetState extends State<MePage> {
       setState(() {
         getMe();
       });
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('snack'),
+        duration: const Duration(seconds: 3),
+      ));
     }
   }
 
@@ -128,9 +130,6 @@ class _MyStatefulWidgetState extends State<MePage> {
     }
   }
 
-
-
-
   Future<String> getNameCame() async {
     final http.Response response = await http.post(
       Uri.parse(hostname + '/getnamecam/'),
@@ -146,6 +145,7 @@ class _MyStatefulWidgetState extends State<MePage> {
       print(namecSave);
     }
   }
+
   Future<String> getName() async {
     final http.Response response = await http.post(
       Uri.parse(hostname + '/getname/'),
@@ -168,23 +168,14 @@ class _MyStatefulWidgetState extends State<MePage> {
     ch();
   }
 
-  // int _currentIndex = 4;
-  // List<Widget> _widgetOptions = <Widget>[
-  //   HomePage(),
-  //   MapPage(),
-  //   InboxPage(),
-  //   GiftPage(),
-  //   MePage(),
-  // ];
-  // void _onItemTap(int index) {
-  //   setState(() {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
-  //     );
-  //     _currentIndex = index;
-  //   });
-  // }
+  final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+    onPrimary: Colors.white,
+    primary: Color.fromRGBO(241, 119, 26, 1),
+    minimumSize: Size(120, 40),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -205,11 +196,9 @@ class _MyStatefulWidgetState extends State<MePage> {
               children: [
                 Icon(
                   Icons.settings,
-                  color: Colors.black54,
                 ),
                 Text(
                   "Setting",
-                  style: TextStyle(color: Colors.black54),
                 )
               ],
             ),
@@ -218,13 +207,6 @@ class _MyStatefulWidgetState extends State<MePage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //     type: BottomNavigationBarType.fixed,
-      //     selectedItemColor: Colors.amber[800],
-      //     iconSize: 30,
-      //     currentIndex: _currentIndex,
-      //     onTap: _onItemTap,
-      //     items: bnb),
       body: SafeArea(
         child: Column(
           children: [
@@ -269,7 +251,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                           width: 100,
                           child: Column(
                             children: [
-                              Text(followers.toString()),
+                              Text(myME["followers"].toString()),
                               Text("ผู้ติดตาม")
                             ],
                           ),
@@ -277,7 +259,10 @@ class _MyStatefulWidgetState extends State<MePage> {
                         Container(
                           width: 100,
                           child: Column(
-                            children: [Text(likeme.toString()), Text("ถูกใจ")],
+                            children: [
+                              Text(myME["like"].toString()),
+                              Text("ถูกใจ")
+                            ],
                           ),
                         ),
                       ],
@@ -293,8 +278,8 @@ class _MyStatefulWidgetState extends State<MePage> {
               width: MediaQuery.of(context).size.width * 0.65,
               height: 60,
               margin: EdgeInsets.only(top: 5),
-              decoration:
-                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),
+              /*decoration:
+                  BoxDecoration(border: Border.all(color: Colors.blueAccent)),*/
               child: Text(
                 myME["note"] ?? "ข้อความ...",
                 style: TextStyle(fontSize: 12),
@@ -306,37 +291,37 @@ class _MyStatefulWidgetState extends State<MePage> {
             ),
             Expanded(
               child: DefaultTabController(
-                length: 4,
+                length: 3,
                 child: Scaffold(
                   body: Column(
                     children: [
-                      TabBar(
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              "Camera",
-                              style: TextStyle(color: Colors.black),
+                      Container(
+                        color: Color(0xffF1771A),
+                        child: TabBar(
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                "Camera",
+                              ),
                             ),
-                          ),
-                          Tab(
-                            child: Text(
-                              "Save",
-                              style: TextStyle(color: Colors.black),
+                            Tab(
+                              child: Text(
+                                "Save",
+                              ),
                             ),
-                          ),
-                          Tab(
+/*                          Tab(
                             child: Text(
                               "Record",
                               style: TextStyle(color: Colors.black),
                             ),
-                          ),
-                          Tab(
-                            child: Text(
-                              "Follow",
-                              style: TextStyle(color: Colors.black),
+                          ),*/
+                            Tab(
+                              child: Text(
+                                "Follow",
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Expanded(
                         child: TabBarView(
@@ -345,7 +330,8 @@ class _MyStatefulWidgetState extends State<MePage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    child: OutlinedButton(
+                                    child:
+                                        /*OutlinedButton(
                                       onPressed: () {
                                         Navigator.push(
                                           context,
@@ -353,20 +339,13 @@ class _MyStatefulWidgetState extends State<MePage> {
                                             builder: (context) => AddCameraPage(
                                                 id: user_id.toString()),
                                           ),
-                                        );
+                                        ).then((_) {
+                                          getMe();
+                                        });
                                       },
                                       child: Text("Add Camera"),
-                                      // shape: RoundedRectangleBorder(
-                                      //   side: BorderSide(
-                                      //       color: Colors.blue,
-                                      //       width: 10,
-                                      //       style: BorderStyle.solid),
-                                      //   borderRadius: BorderRadius.circular(50),
-
-                                      // ),
                                       style: OutlinedButton.styleFrom(
                                         side: BorderSide(
-                                            color: Colors.blue,
                                             width: 10,
                                             style: BorderStyle.solid),
                                         shape: RoundedRectangleBorder(
@@ -375,6 +354,23 @@ class _MyStatefulWidgetState extends State<MePage> {
                                           ),
                                         ),
                                       ),
+                                    ),*/
+                                        ElevatedButton(
+                                      style: raisedButtonStyle,
+                                      child: Text(
+                                        'Add Camera',
+                                      ),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => AddCameraPage(
+                                                id: user_id.toString()),
+                                          ),
+                                        ).then((_) {
+                                          getMe();
+                                        });
+                                      },
                                     ),
                                   ),
                                   Expanded(
@@ -384,14 +380,18 @@ class _MyStatefulWidgetState extends State<MePage> {
                                         itemBuilder: (context, index) {
                                           return FlatButton(
                                             onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        PlayPage(
-                                                            idcam: cJson[index]
-                                                                ["_id"])),
-                                              );
+                                              if (cJson[index]['status'] ==
+                                                  true) {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PlayPage(
+                                                              idcam:
+                                                                  cJson[index]
+                                                                      ["_id"])),
+                                                );
+                                              }
                                             },
                                             child: Container(
                                               child: Card(
@@ -405,13 +405,12 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                     Container(
                                                       width: 150,
                                                       height: 100,
-                                                      color: Color(0xFFF1771A),
-                                                      child: Icon(
-                                                        Icons
-                                                            .play_circle_outline_outlined,
-                                                        color: Colors.white,
-                                                        size: 50,
-                                                      ),
+                                                      child: Image.network(
+                                                          hostname +
+                                                              '/imageVideo/' +
+                                                              cJson[index]
+                                                                  ["_id"] +
+                                                              '.jpg'),
                                                     ),
                                                     Container(
                                                       width: 100,
@@ -443,9 +442,6 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                                       true
                                                                   ? 'playing...'
                                                                   : 'stop',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black45),
                                                             ),
                                                           ),
                                                         ],
@@ -454,7 +450,6 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                     Container(
                                                       child: PopupMenuButton(
                                                         onSelected: (result) {
-                                                          print(result);
                                                           if (result == 1) {
                                                             startcam(
                                                                 cJson[index]
@@ -473,18 +468,23 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                         itemBuilder:
                                                             (context) => [
                                                           PopupMenuItem(
-                                                            value: 1,
-                                                            child:
-                                                                Text("Start"),
-                                                          ),
-                                                          PopupMenuItem(
-                                                            value: 2,
-                                                            child: Text("Stop"),
+                                                            value: cJson[index][
+                                                                        'status'] ==
+                                                                    true
+                                                                ? 2
+                                                                : 1,
+                                                            child: Text(cJson[
+                                                                            index]
+                                                                        [
+                                                                        'status'] ==
+                                                                    true
+                                                                ? 'Stop'
+                                                                : 'Start'),
                                                           ),
                                                           PopupMenuItem(
                                                             value: 3,
                                                             child:
-                                                                Text("Removed"),
+                                                                Text("remove"),
                                                           ),
                                                         ],
                                                       ),
@@ -510,8 +510,9 @@ class _MyStatefulWidgetState extends State<MePage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                PlayPage(idcam: cSave[index])),
+                                            builder: (context) => PlayPage(
+                                                idcam: cSave[index]["idcam"]
+                                                    .toString())),
                                       );
                                     },
                                     child: Container(
@@ -521,13 +522,10 @@ class _MyStatefulWidgetState extends State<MePage> {
                                             Container(
                                               width: 150,
                                               height: 100,
-                                              color: Color(0xFFF1771A),
-                                              child: Icon(
-                                                Icons
-                                                    .play_circle_outline_outlined,
-                                                color: Colors.white,
-                                                size: 50,
-                                              ),
+                                              child: Image.network(hostname +
+                                                  '/imageVideo/' +
+                                                  cSave[index]["idcam"] +
+                                                  '.jpg'),
                                             ),
                                             Container(
                                               margin: EdgeInsets.only(left: 10),
@@ -536,7 +534,8 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    child: Text(namecSave[index]),
+                                                    child: Text(
+                                                        cSave[index]["title"]),
                                                   ),
                                                   Container(
                                                     margin: EdgeInsets.only(
@@ -554,7 +553,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                 },
                               ),
                             ),
-                            Container(
+                            /*Container(
                               child: ListView.builder(
                                 itemCount: 0,
                                 itemBuilder: (context, index) {
@@ -599,7 +598,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                   );
                                 },
                               ),
-                            ),
+                            ),*/
                             Container(
                               child: ListView.builder(
                                 itemCount: cFollowing.length,
@@ -610,7 +609,9 @@ class _MyStatefulWidgetState extends State<MePage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) => UserPage(
-                                              userid: cFollowing[index]),
+                                              userid: cFollowing[index]
+                                                      ["f_user_id"]
+                                                  .toString()),
                                         ),
                                       );
                                     },
@@ -624,7 +625,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                               child: CircleAvatar(
                                                 backgroundImage: NetworkImage(
                                                     hostname +
-                                                        '/images-profile/${cFollowing[index]}.png'),
+                                                        '/images-profile/${cFollowing[index]["f_user_id"]}.png'),
                                               ),
                                             ),
                                             Container(
@@ -634,7 +635,9 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Container(
-                                                    child: Text(namecFollowing[index]),
+                                                    child: Text(
+                                                        cFollowing[index]
+                                                            ["name"]),
                                                   ),
                                                   Container(
                                                     margin: EdgeInsets.only(

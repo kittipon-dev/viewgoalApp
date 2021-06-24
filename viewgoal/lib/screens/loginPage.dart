@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/config.dart';
 import 'package:viewgoal/main.dart';
+import 'package:viewgoal/screens/generated/repassPage.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/homePage.dart';
 import 'package:viewgoal/screens/registerPage.dart';
@@ -28,7 +29,7 @@ class _MyHomePageState extends State<LoginPage> {
     print(user_id);
     if (user_id != null && user_id > 0) {
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => MainPage()),
+          MaterialPageRoute(builder: (context) => MyApp()),
           (Route<dynamic> route) => false);
     }
   }
@@ -55,7 +56,7 @@ class _MyHomePageState extends State<LoginPage> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setInt('user_id', r["user_id"]);
         Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (context) => MainPage()),
+            MaterialPageRoute(builder: (context) => MyApp()),
             (Route<dynamic> route) => false);
       }
     } else if (response.statusCode == 401) {
@@ -66,6 +67,15 @@ class _MyHomePageState extends State<LoginPage> {
     }
   }
 
+  final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
+    onPrimary: Colors.white,
+    primary: Color.fromRGBO(241, 119, 26, 1),
+    minimumSize: Size(120, 40),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,13 +83,13 @@ class _MyHomePageState extends State<LoginPage> {
         child: SingleChildScrollView(
           padding: EdgeInsets.all(10.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Center(
+              Container(
+                margin: EdgeInsets.only(top: 50.0),
                 child: Image.asset('assets/images/logo.png'),
               ),
-              SizedBox(height: 10.0),
+              SizedBox(height: 15),
               Text(
                 'ViewGoal',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -95,7 +105,7 @@ class _MyHomePageState extends State<LoginPage> {
                 textAlign: TextAlign.center,
               ),
               Container(
-                margin: EdgeInsets.only(top: 70.0),
+                margin: EdgeInsets.only(top: 50.0),
                 child: Text(
                   'Login to ViewGoal',
                   style: TextStyle(
@@ -106,7 +116,7 @@ class _MyHomePageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.only(top: 20, left: 20, right: 20),
                 child: Column(
                   children: <Widget>[
                     Container(
@@ -119,7 +129,7 @@ class _MyHomePageState extends State<LoginPage> {
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          hintText: 'Email or Phone',
+                          hintText: 'Email',
                           labelStyle: TextStyle(
                             color: Color.fromRGBO(0, 0, 0, 0.5),
                           ),
@@ -146,6 +156,59 @@ class _MyHomePageState extends State<LoginPage> {
                 ),
               ),
               Container(
+                margin: EdgeInsets.only(top: 20),
+                //color: Colors.amber,
+                child: Column(
+                  children: [
+                    TextButton(
+                      child: Text(
+                        "Forgot Password",
+                        style: TextStyle(
+                          fontSize: 16,
+                          //color: Colors.black45
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => RePassPage()),
+                        );
+                      },
+                    ),
+                    SizedBox(height: 15),
+                    ElevatedButton(
+                      style: raisedButtonStyle,
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () => login(),
+                    ),
+                    SizedBox(height: 15),
+                    TextButton(
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterPage()),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+
+              /*Container(
                 padding: EdgeInsets.all(20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -188,19 +251,7 @@ class _MyHomePageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 20.0),
-              SelectableText(
-                'Forgotten account?',
-                style: TextStyle(
-                  fontSize: 20,
-                  decoration: TextDecoration.underline,
-                  color: Color.fromRGBO(0, 0, 0, 0.7),
-                ),
-                textAlign: TextAlign.center,
-                onTap: () => print('account recovery'),
-              ),
-              SizedBox(height: 100.0),
+              ),*/
             ],
           ),
         ),

@@ -29,7 +29,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   http: ^0.13.1
   date_time_picker: ^2.0.0
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.0.6
   material_design_icons_flutter: 4.0.5755
   pull_to_refresh: ^1.6.3
   #flutter_vlc_player: ^5.0.2
@@ -43,6 +43,9 @@ dependencies:
   #url_launcher: 5.0.2
 #  geolocator: ^6.2.1
   google_map_location_picker: ^4.1.7
+  flutter_google_places_hoc081098: ^1.0.0-nullsafety.2
+  google_api_headers: ^1.0.0
+
 
   socket_io: ^0.9.4
   socket_io_client: ^0.9.12
@@ -51,12 +54,21 @@ dependencies:
   #dash_chat: ^1.1.15
   #cloud_firestore: ^1.0.0
   #firebase_storage: ^8.0.0
+
+  flutter_search_bar: ^2.1.0
+  provider: ^5.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_launcher_icons: "^0.8.0"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_icons:
+  image_path: "assets/images/logo.png"
+  android: true
+  ios: true
 
 # The following section is specific to Flutter.
 flutter:

@@ -84,9 +84,18 @@ class _MeScreenState extends State<ManagerProfile> {
   Future<void> setProfile() async {
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse(hostname + '/editprofile'));
+
+    request.body = json.encode({
+      "user_id": "${widget.user_id}",
+      "name": "${textName.text}",
+      "note":"${textNote.text}"
+    });
+    /*
     request.body =
-        '''{\r\n    "user_id":"${widget.user_id}",\r\n    "name":"${textName.text}",\r\n    "note":"${textNote.text}"\r\n}''';
+        '''{\r\n    "user_id":"${widget.user_id}",\r\n    "name":"${textName.text}",\r\n    "note":"Welcome\nto\nMyWorld\nHello\nWorld\n"\r\n}''';
+    */
     request.headers.addAll(headers);
+
 
     http.StreamedResponse response = await request.send();
 
@@ -239,6 +248,10 @@ class _MeScreenState extends State<ManagerProfile> {
                     ),
                     TextField(
                       controller: textNote,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: 6,
+                      maxLength: 500,
+                      textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.only(bottom: 3),
                         floatingLabelBehavior: FloatingLabelBehavior.always,

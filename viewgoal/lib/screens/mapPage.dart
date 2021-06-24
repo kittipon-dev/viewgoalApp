@@ -1,8 +1,11 @@
 import 'dart:convert';
-
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:location/location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:viewgoal/screens/giftPage.dart';
 import 'package:viewgoal/screens/homePage.dart';
@@ -11,7 +14,9 @@ import 'package:viewgoal/screens/loginPage.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:location/location.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+
 import 'package:viewgoal/screens/mePage.dart';
 import 'package:viewgoal/screens/playPage.dart';
 
@@ -28,13 +33,17 @@ class MapPage extends StatefulWidget {
   _MapPageState createState() => _MapPageState();
 }
 
+const kGoogleApiKey = "AIzaSyD2PyV-Twc60XZs2y9eFhKwkxmDmc2FGsk";
+
 class _MapPageState extends State<MapPage> {
   List<Marker> _marker = [];
   var cJson = [];
 
   Completer<GoogleMapController> _controller = Completer();
   LocationData currentLocation;
-
+  CameraPosition _initialPosition = CameraPosition(target: LatLng(13.736717,100.523186), zoom: 5);
+  double _lat = 13.736717;
+  double _lng = 100.523186;
   BitmapDescriptor customIcon;
 
   customMarkerIcon() async {
@@ -51,8 +60,6 @@ class _MapPageState extends State<MapPage> {
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
       cJson = jsonDecode(receivedJson);
-      print(cJson);
-
       setState(() {
         for (int i = 0; i < cJson.length; i++) {
           _marker.add(
@@ -75,11 +82,14 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  void _onMapCreated(GoogleMapController controller) {
+  GoogleMapController controller;
+
+  void _onMapCreated(controller) {
     _controller.complete(controller);
   }
 
   int user_id;
+
 
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -101,80 +111,144 @@ class _MapPageState extends State<MapPage> {
     ch();
     customMarkerIcon();
     getMarker();
-    _goToMe();
+    //_goToMe();
   }
 
-  // int _currentIndex = 1;
-  // List<Widget> _widgetOptions = <Widget>[
-  //   HomePage(),
-  //   MapPage(),
-  //   InboxPage(),
-  //   GiftPage(),
-  //   MePage(),
-  // ];
-  // void _onItemTap(int index) {
-  //   setState(() {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => _widgetOptions[_currentIndex]),
-  //     );
-  //     _currentIndex = index;
-  //   });
-  // }
+  double _zoom = 5;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          title: Stack(
-            children: [
-              Container(
-                height: 50.0,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey, width: 1.0),
-                    borderRadius: BorderRadius.circular(30),
-                    color: Colors.white),
-                child: TextField(
-                  cursorColor: Colors.grey,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(left: 15.0, top: 15.0),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.search),
-                      onPressed: () {
-                        print("123");
-                      },
-                      iconSize: 30,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                size: 35,
+                color: Color(0xffF1771A),
               ),
-            ],
-          ),
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          elevation: 0.0,
+              onPressed: _handlePressButton)
+        ],
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        elevation: 0.0,
+      ),
+      body: GoogleMap(
+        mapType: MapType.normal,
+        myLocationButtonEnabled: true,
+        initialCameraPosition:_initialPosition,
+        onMapCreated: _onMapCreated,
+        markers: Set.from(_marker),
+      ),
+      /*
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _handlePressButton,
+              child: Text('Search places'),
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed('/search');
+              },
+              child: Text('Custom'),
+            ),
+          ],
         ),
-        // bottomNavigationBar: BottomNavigationBar(
-        //     type: BottomNavigationBarType.fixed,
-        //     selectedItemColor: Colors.amber[800],
-        //     iconSize: 30,
-        //     currentIndex: _currentIndex,
-        //     onTap: _onItemTap,
-        //     items: bnb),
-        body: GoogleMap(
-          mapType: MapType.normal,
-          myLocationButtonEnabled: true,
-          initialCameraPosition:
-              CameraPosition(target: LatLng(13.736717, 100.523186), zoom: 5),
-          onMapCreated: _onMapCreated,
-          markers: Set.from(_marker),
-        ));
+      ),
+      */
+    );
   }
 
+  Mode _mode = Mode.overlay;
+
+  Future<void> _handlePressButton() async {
+    void onError(PlacesAutocompleteResponse response) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(response.errorMessage ?? 'Unknown error'),
+        ),
+      );
+    }
+
+    // show input autocomplete with selected mode
+    // then get the Prediction selected
+    final p = await PlacesAutocomplete.show(
+      context: context,
+      apiKey: kGoogleApiKey,
+      onError: onError,
+      mode: _mode,
+      language: 'th',
+      components: [Component(Component.country, 'th')],
+    );
+
+    final _places = GoogleMapsPlaces(
+      apiKey: kGoogleApiKey,
+      apiHeaders: await GoogleApiHeaders().getHeaders(),
+    );
+    final detail = await _places.getDetailsByPlaceId(p.placeId);
+    final geometry = detail.result.geometry;
+    final lat = geometry.location.lat;
+    final lng = geometry.location.lng;
+
+    final GoogleMapController controller = await _controller.future;
+    controller.moveCamera(CameraUpdate.newCameraPosition(CameraPosition(
+      target: LatLng(lat, lng),
+      zoom: 20,
+    )));
+
+    //print(lat);
+    //await displayPrediction(p, ScaffoldMessenger.of(context));
+  }
+
+  Future<void> displayPrediction(
+      Prediction p, ScaffoldMessengerState messengerState) async {
+    if (p == null) {
+      return;
+    }
+    // get detail (lat/lng)
+    final _places = GoogleMapsPlaces(
+      apiKey: kGoogleApiKey,
+      apiHeaders: await GoogleApiHeaders().getHeaders(),
+    );
+
+    final detail = await _places.getDetailsByPlaceId(p.placeId);
+    final geometry = detail.result.geometry;
+    final lat = geometry.location.lat;
+    final lng = geometry.location.lng;
+
+    var newPosition = CameraPosition(
+        target: LatLng(lat, lng),
+        zoom: 30);
+
+    CameraUpdate update =CameraUpdate.newCameraPosition(newPosition);
+
+    messengerState.showSnackBar(
+      SnackBar(
+        content: Text('${p.description} - $lat/$lng'),
+      ),
+    );
+    controller.moveCamera(update);
+    _controller.complete(controller);
+
+    print(p.description);
+
+
+    /*
+    messengerState.showSnackBar(
+      SnackBar(
+        content: Text('${p.description} - $lat/$lng'),
+      ),
+    );
+    */
+  }
+
+/*
   Future<LocationData> getCurrentLocation() async {
     Location location = Location();
     try {
@@ -199,7 +273,17 @@ class _MapPageState extends State<MapPage> {
       ),
     );
   }
-
+*/
+/*
+  Future<void> maptest() async {
+    Prediction p = await PlacesAutocomplete.show(
+        context: context,
+        apiKey: kGoogleApiKey,
+        mode: Mode.overlay, // Mode.fullscreen
+        language: "th",
+        components: [new Component(Component.country, "th")]);
+  }
+*/
 //   Widget _googleMap(BuildContext context) {
 //     return Container(
 //       height: MediaQuery.of(context).size.height,

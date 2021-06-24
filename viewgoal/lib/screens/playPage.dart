@@ -18,10 +18,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'giftPage.dart';
 
+var res = {};
 var cJson = {};
 var list = [];
-var listF = [];
-var listLike = [];
 var cComment = [];
 String urlimgprofile = hostname + '/images-profile/null.png';
 
@@ -80,7 +79,8 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
-      cJson = jsonDecode(receivedJson);
+      res = jsonDecode(receivedJson);
+      cJson = res["Camera"];
       urlimgprofile = hostname + '/images-profile/${cJson["user_id"]}.png';
       listplaying(user_id.toString());
     }
@@ -92,74 +92,60 @@ class _MyStatefulWidgetState extends State<PlayPage> {
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
       String receivedJson = await response.stream.bytesToString();
-      var req = {};
-      req = jsonDecode(receivedJson);
-      list = req["listplay"];
-      listF = req["favorite"];
-      listLike = req["user"]["like"];
-      for (var i = 0; i < listLike.length; i++) {
-        if (listLike[i] == widget.idcam) {
-          l = true;
-        } else {
-          l = false;
-        }
-      }
-      for (var i = 0; i < listF.length; i++) {
-        if (listF[i]["_id"] == widget.idcam) {
-          f = true;
-        } else {
-          f = false;
-        }
-      }
+      var myobj = jsonDecode(receivedJson);
+      list = myobj["listplay"];
       setState(() {});
     } else {
       //print(response.reasonPhrase);
     }
   }
 
-  Future<void> add_favorite(id) async {
-    var request = http.Request(
+  Future<void> save(id) async {
+    if (res["sSave"] == false) {
+      var request = http.Request(
         'GET',
         Uri.parse(hostname +
             '/addfavorite?user_id=' +
-            id +
+            user_id.toString() +
             '&idcam=' +
-            widget.idcam));
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      getPlay(widget.idcam);
-      setState(() {});
-    } else {
-      //print(response.reasonPhrase);
-    }
-  }
-
-  Future<void> remove_favorite(id) async {
-    var request = http.Request(
+            widget.idcam),
+      );
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        setState(() {
+          getPlay(widget.idcam);
+        });
+      } else {
+        //print(response.reasonPhrase);
+      }
+    } else if (res["sSave"] == true) {
+      var request = http.Request(
         'GET',
         Uri.parse(hostname +
             '/removefavorite?user_id=' +
-            id +
+            user_id.toString() +
             '&idcam=' +
-            widget.idcam));
-    http.StreamedResponse response = await request.send();
-    if (response.statusCode == 200) {
-      getPlay(widget.idcam);
-      setState(() {});
-    } else {
-      //print(response.reasonPhrase);
+            widget.idcam),
+      );
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        getPlay(widget.idcam);
+        setState(() {
+          getPlay(widget.idcam);
+        });
+      } else {
+        //print(response.reasonPhrase);
+      }
     }
   }
 
-  Future<void> like(r_user_id) async {
+  Future<void> like(l) async {
     if (l == false) {
       var request = http.Request(
         'GET',
         Uri.parse(hostname +
             '/like?t_user_id=' +
             user_id.toString() +
-            '&r_user_id=' +
-            r_user_id +
             '&idcam=' +
             widget.idcam),
       );
@@ -176,8 +162,6 @@ class _MyStatefulWidgetState extends State<PlayPage> {
         Uri.parse(hostname +
             '/unlike?t_user_id=' +
             user_id.toString() +
-            '&r_user_id=' +
-            r_user_id +
             '&idcam=' +
             widget.idcam),
       );
@@ -195,8 +179,9 @@ class _MyStatefulWidgetState extends State<PlayPage> {
   void initState() {
     super.initState();
     ch();
+
     _videoPlayerController = VlcPlayerController.network(
-      'http://192.168.2.14:8000/live/ipcam.flv',
+      'http://52.77.11.127:8000/live/${widget.idcam}.flv',
       hwAcc: HwAcc.FULL,
       autoPlay: true,
       options: VlcPlayerOptions(),
@@ -204,11 +189,11 @@ class _MyStatefulWidgetState extends State<PlayPage> {
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     super.dispose();
+    await _videoPlayerController.stopRendererScanning();
+    await _videoPlayerController.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -227,16 +212,12 @@ class _MyStatefulWidgetState extends State<PlayPage> {
         actions: [
           FlatButton(
               onPressed: () {
-                if (f == false) {
-                  add_favorite(user_id.toString());
-                } else {
-                  remove_favorite(user_id.toString());
-                }
+                save(res["sSave"]);
               },
               child: Row(
                 children: [
                   Icon(
-                    f == true ? Icons.remove : Icons.add,
+                    res["sSave"] == true ? Icons.remove : Icons.add,
                     color: Colors.white,
                   ),
                   Text(
@@ -253,7 +234,6 @@ class _MyStatefulWidgetState extends State<PlayPage> {
         child: Column(
           children: [
             Container(
-              height: 300,
               child: VlcPlayer(
                 controller: _videoPlayerController,
                 aspectRatio: 16 / 9,
@@ -294,13 +274,13 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                             children: [
                               Text(cJson["view"].toString() + " view"),
                               FlatButton(
-                                textColor: Colors.black,
+                                //textColor: Colors.black,
                                 onPressed: () {
-                                  like(cJson["user_id"].toString());
+                                  like(res["sLike"]);
                                 },
                                 child: Row(
                                   children: [
-                                    Icon(l == false
+                                    Icon(res["sLike"] == false
                                         ? Icons.favorite_outline
                                         : Icons.favorite),
                                     Text("  " + cJson["like"].toString())
@@ -308,7 +288,7 @@ class _MyStatefulWidgetState extends State<PlayPage> {
                                 ),
                               ),
                               FlatButton(
-                                textColor: Colors.black,
+                                //textColor: Colors.black,
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -340,50 +320,53 @@ class _MyStatefulWidgetState extends State<PlayPage> {
               child: ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (context, index) {
-                  return FlatButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                PlayPage(idcam: list[index]["_id"])),
-                      );
-                    },
-                    child: Container(
-                      child: Card(
-                        child: Row(
-                          children: [
-                            Container(
-                              width: 150,
-                              height: 100,
-                              color: Color(0xFFF1771A),
-                              child: Icon(
-                                Icons.play_circle_outline_outlined,
-                                color: Colors.white,
-                                size: 50,
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(left: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                  return list[index]["_id"] != widget.idcam
+                      ? FlatButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      PlayPage(idcam: list[index]["_id"])),
+                            );
+                          },
+                          child: Container(
+                            child: Card(
+                              child: Row(
                                 children: [
                                   Container(
-                                    child: Text(list[index]["title"]),
+                                    width: 150,
+                                    height: 100,
+                                    color: Color(0xFFF1771A),
+                                    child: Icon(
+                                      Icons.play_circle_outline_outlined,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
                                   ),
                                   Container(
-                                    margin: EdgeInsets.only(top: 10),
-                                    child:
-                                        Text(list[index]["location"]["name"]),
-                                  ),
+                                    margin: EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          child: Text(list[index]["title"]),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Text(
+                                              list[index]["location"]["name"]),
+                                        ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
+                            ),
+                          ),
+                        )
+                      : null;
                 },
               ),
             ),

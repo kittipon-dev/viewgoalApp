@@ -134,28 +134,31 @@ class _MyStatefulWidgetState extends State<CommentPage> {
                   itemCount: cComment.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      child: Card(
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              backgroundImage: NetworkImage(hostname +
-                                  '/images-profile/${cComment[index]["user_id"]}.png'),
-                              child: FlatButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserPage(
-                                              userid: cComment[index]["user_id"]
-                                                  .toString(),
-                                            )),
-                                  );
-                                },
-                              ),
+                      margin: EdgeInsets.only(top: 15),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(hostname +
+                                '/images-profile/${cComment[index]["user_id"]}.png'),
+                            child: FlatButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => UserPage(
+                                            userid: cComment[index]["user_id"]
+                                                .toString(),
+                                          )),
+                                );
+                              },
                             ),
-                            Text(cComment[index]["comment"])
-                          ],
-                        ),
+                          ),
+                          Expanded(
+                            child: Card(
+                              child: Text(cComment[index]["comment"]),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
