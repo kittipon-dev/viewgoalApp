@@ -1,10 +1,14 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:viewgoal/dark_theme_provider.dart';
+import 'package:viewgoal/screens/infoCamera.dart';
 import 'package:viewgoal/screens/loginPage.dart';
 import 'package:viewgoal/screens/playPage.dart';
 import 'package:viewgoal/screens/settingsPage.dart';
@@ -40,6 +44,7 @@ class _MyStatefulWidgetState extends State<MePage> {
   String dropdownValue = 'One';
 
   int user_id;
+
   var img = NetworkImage(hostname + '/images-profile/null.png');
 
   int likeme = 0;
@@ -72,16 +77,13 @@ class _MyStatefulWidgetState extends State<MePage> {
       myME = req["user"];
       cJson = req["camera"];
       cSave = req["save"];
-
       cFollowing = req["following"];
-      print(cJson);
-
 /*
       list = await json.decode(receivedJson);
       cJson = await list[1];
        */
-      img =
-          NetworkImage(hostname + '/images-profile/${user_id.toString()}.png');
+      img = NetworkImage(hostname + '/images-profile/${user_id.toString()}.png#${new DateTime.now()}');
+      print(img);
       setState(() {});
     } else if (response.statusCode == 401) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -92,20 +94,42 @@ class _MyStatefulWidgetState extends State<MePage> {
     }
   }
 
+  Timer _timer;
+
+  void showLoadingIndicator() {
+    _timer = Timer(Duration(seconds: 4), () {
+      setState(() {
+        getMe();
+      });
+    });
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            child: Container(
+              width: 50,
+              height: 50,
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        );
+      },
+      barrierDismissible: false,
+    ).then((val) {
+      if (_timer.isActive) {
+        _timer.cancel();
+      }
+    });
+  }
+
   Future<void> startcam(idcam) async {
     var request = await http.Request(
         'GET', Uri.parse(hostname + '/startcam?_id=' + idcam));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-      setState(() {
-        getMe();
-      });
-    }else{
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: const Text('snack'),
-        duration: const Duration(seconds: 3),
-      ));
-    }
+      showLoadingIndicator();
+    } else {}
   }
 
   Future<void> stopcam(idcam) async {
@@ -113,9 +137,7 @@ class _MyStatefulWidgetState extends State<MePage> {
         'GET', Uri.parse(hostname + '/stopcam?_id=' + idcam));
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {
-      setState(() {
-        getMe();
-      });
+      showLoadingIndicator();
     }
   }
 
@@ -176,6 +198,14 @@ class _MyStatefulWidgetState extends State<MePage> {
       borderRadius: BorderRadius.all(Radius.circular(10)),
     ),
   );
+
+  Future<void> _deleteAppDir() async {
+    final appDir = await getApplicationSupportDirectory();
+
+    if (appDir.existsSync()) {
+      appDir.deleteSync(recursive: true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -460,9 +490,17 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                                 ["_id"]);
                                                           } else if (result ==
                                                               3) {
-                                                            removedcam(
-                                                                cJson[index]
-                                                                    ["_id"]);
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    InfoCamera(
+                                                                        data: cJson[
+                                                                            index]),
+                                                              ),
+                                                            ).then((_) {
+                                                              getMe();
+                                                            });
                                                           }
                                                         },
                                                         itemBuilder:
@@ -483,8 +521,7 @@ class _MyStatefulWidgetState extends State<MePage> {
                                                           ),
                                                           PopupMenuItem(
                                                             value: 3,
-                                                            child:
-                                                                Text("remove"),
+                                                            child: Text("info"),
                                                           ),
                                                         ],
                                                       ),

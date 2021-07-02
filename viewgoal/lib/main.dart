@@ -65,8 +65,13 @@ class _MyHomePageState extends State<MyApp> {
   Future<void> ch() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var url = Uri.http('52.77.11.127:2311', '/check_online');
+  //  var url = Uri.http('52.77.11.127:2311', '/check_online');
 
+    var request = await http.Request(
+        'GET', Uri.parse(hostname + '/check_online'));
+    http.StreamedResponse response = await request.send();
+
+/*
     // Await the http get response, then decode the json-formatted response.
     var response = await http.get(url).timeout(
       Duration(seconds: 5),
@@ -77,6 +82,7 @@ class _MyHomePageState extends State<MyApp> {
         setState(() {});
       },
     );
+  */
     tOnline = true;
     if (response.statusCode == 200) {
       print(" ONline");
@@ -92,7 +98,10 @@ class _MyHomePageState extends State<MyApp> {
 */
       }
       setState(() {});
-    } else {}
+    } else {
+      print("OFF");
+    }
+
   }
 
   @override

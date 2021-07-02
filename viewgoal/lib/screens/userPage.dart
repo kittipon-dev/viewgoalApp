@@ -193,11 +193,9 @@ class _MyStatefulWidgetState extends State<UserPage> {
                     children: [
                       Icon(
                         Icons.message_outlined,
-                        color: Colors.black54,
                       ),
                       Text(
                         "Message ",
-                        style: TextStyle(color: Colors.black54),
                       )
                     ],
                   ),
@@ -214,11 +212,9 @@ class _MyStatefulWidgetState extends State<UserPage> {
                         _isLike != true
                             ? Icons.favorite_outline
                             : Icons.favorite,
-                        color: Colors.black54,
                       ),
                       Text(
                         "Like",
-                        style: TextStyle(color: Colors.black54),
                       )
                     ],
                   ),
@@ -233,11 +229,9 @@ class _MyStatefulWidgetState extends State<UserPage> {
                     children: [
                       Icon(
                         _isFollo != true ? Icons.add : Icons.remove,
-                        color: Colors.black54,
                       ),
                       Text(
                         "Follow",
-                        style: TextStyle(color: Colors.black54),
                       )
                     ],
                   ),

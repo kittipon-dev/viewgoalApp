@@ -32,58 +32,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3a6734dd-5c79-4e7c-8f8e-5029ed0f916b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/viewgoal/android/app/proguard-rules.pro" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viewgoal/assets/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viewgoal/lib/constant.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viewgoal/lib/dark_theme_provider.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viewgoal/lib/error/connect_server.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viewgoal/lib/screens/generated/repassPage.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viewgoal/lib/util/devfestpreferences.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/viewgoal/lib/screens/infoCamera.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/viewgoalApp.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/viewgoalApp.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-hdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-mdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/config.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/config.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/addCamera.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/addCamera.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/commentPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/commentPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/homePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/homePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/inboxPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/inboxPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/loginPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/loginPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/mapPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/mapPage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/mePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/mePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/messagePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/messagePage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/playPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/playPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/registerPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/registerPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/settingsPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/settingsPage.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/sendmessagePage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/sendmessagePage.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viewgoal/lib/screens/userPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/screens/userPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/settings/Account/manage_my_account.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/settings/Account/manage_my_account.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/lib/settings/Account/manage_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/lib/settings/Account/manage_profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viewgoal/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/viewgoal/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,6 +48,9 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[SerialNumber@9b0b5fb0]" />
+  <component name="GenerateSignedApkSettings">
+    <option name="BUILD_TARGET_KEY" value="apk" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -100,6 +60,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ApkExportedModule" value="viewgoalApp" />
     <property name="BundleExportedModule" value="viewgoalApp" />
     <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_4_XL_API_30" />
     <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2021-05-06T03:25:08.724Z" />
@@ -107,7 +68,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/viewgoal" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -116,6 +77,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\k_bas\OneDrive\Documents\GitHub\viewgoalApp\viewgoal\lib\screens" />
       <recent name="C:\Users\k_bas\OneDrive\Documents\GitHub\viewgoalApp\viewgoal\lib" />
       <recent name="C:\Users\k_bas\OneDrive\Documents\GitHub\viewgoalApp\viewgoal\lib\screens\generated" />
       <recent name="C:\Users\k_bas\OneDrive\Documents\GitHub\viewgoalApp\viewgoal\assets" />
@@ -161,18 +123,18 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="446" y="119" key="#Intentions/0.0.1707.920@0.0.1707.920" timestamp="1623090694263" />
-    <state x="334" y="35" key="#Project_Structure" timestamp="1623665123693">
+    <state x="334" y="35" key="#Project_Structure" timestamp="1624702812971">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="334" y="35" key="#Project_Structure/0.0.1707.920@0.0.1707.920" timestamp="1623665123693" />
+    <state x="334" y="35" key="#Project_Structure/0.0.1707.920@0.0.1707.920" timestamp="1624702812971" />
     <state x="564" y="47" key="#Unnamed" timestamp="1620271521550">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="564" y="47" key="#Unnamed/0.0.1707.920@0.0.1707.920" timestamp="1620271521550" />
-    <state x="530" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619862114874">
+    <state x="411" y="164" width="1089" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1624702871885">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="530" y="166" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1707.920@0.0.1707.920" timestamp="1619862114874" />
+    <state x="411" y="164" width="1089" height="714" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1707.920@0.0.1707.920" timestamp="1624702871885" />
     <state x="774" y="286" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1619862108771">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
@@ -193,34 +155,34 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="672" y="206" key="AndroidProcessChooserDialog/0.0.1707.920@0.0.1707.920" timestamp="1619862141995" />
-    <state x="869" y="251" key="FileChooserDialogImpl" timestamp="1623666552271">
+    <state x="869" y="251" key="FileChooserDialogImpl" timestamp="1624703121771">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="869" y="251" key="FileChooserDialogImpl/0.0.1707.920@0.0.1707.920" timestamp="1623666552271" />
-    <state width="1663" height="216" key="GridCell.Tab.0.bottom" timestamp="1624572697907">
+    <state x="869" y="251" key="FileChooserDialogImpl/0.0.1707.920@0.0.1707.920" timestamp="1624703121771" />
+    <state width="1663" height="216" key="GridCell.Tab.0.bottom" timestamp="1624703123115">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state width="1663" height="216" key="GridCell.Tab.0.bottom/0.0.1707.920@0.0.1707.920" timestamp="1624572697907" />
+    <state width="1663" height="216" key="GridCell.Tab.0.bottom/0.0.1707.920@0.0.1707.920" timestamp="1624703123115" />
     <state width="916" height="394" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1617226381901" />
-    <state width="1663" height="216" key="GridCell.Tab.0.center" timestamp="1624572697907">
+    <state width="1663" height="216" key="GridCell.Tab.0.center" timestamp="1624703123115">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state width="1663" height="216" key="GridCell.Tab.0.center/0.0.1707.920@0.0.1707.920" timestamp="1624572697907" />
+    <state width="1663" height="216" key="GridCell.Tab.0.center/0.0.1707.920@0.0.1707.920" timestamp="1624703123115" />
     <state width="916" height="394" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1617226381901" />
-    <state width="1663" height="216" key="GridCell.Tab.0.left" timestamp="1624572697906">
+    <state width="1663" height="216" key="GridCell.Tab.0.left" timestamp="1624703123115">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state width="1663" height="216" key="GridCell.Tab.0.left/0.0.1707.920@0.0.1707.920" timestamp="1624572697906" />
+    <state width="1663" height="216" key="GridCell.Tab.0.left/0.0.1707.920@0.0.1707.920" timestamp="1624703123115" />
     <state width="916" height="394" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1617226381901" />
-    <state width="1663" height="216" key="GridCell.Tab.0.right" timestamp="1624572697907">
+    <state width="1663" height="216" key="GridCell.Tab.0.right" timestamp="1624703123115">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state width="1663" height="216" key="GridCell.Tab.0.right/0.0.1707.920@0.0.1707.920" timestamp="1624572697907" />
+    <state width="1663" height="216" key="GridCell.Tab.0.right/0.0.1707.920@0.0.1707.920" timestamp="1624703123115" />
     <state width="916" height="394" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1617226381901" />
-    <state x="355" y="69" key="SettingsEditor" timestamp="1623665014005">
+    <state x="355" y="69" key="SettingsEditor" timestamp="1624703001055">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="355" y="69" key="SettingsEditor/0.0.1707.920@0.0.1707.920" timestamp="1623665014005" />
+    <state x="355" y="69" key="SettingsEditor/0.0.1707.920@0.0.1707.920" timestamp="1624703001055" />
     <state x="434" y="144" key="new project wizard" timestamp="1623529243884">
       <screen x="0" y="0" width="1707" height="920" />
     </state>

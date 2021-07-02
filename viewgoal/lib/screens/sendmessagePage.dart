@@ -205,7 +205,7 @@ class _MyStatefulWidgetState extends State<SendMessagePage> {
                   Expanded(
                     child: Container(
                       child: TextField(
-                        style: TextStyle(fontSize: 20, color: Colors.black),
+                        style: TextStyle(fontSize: 20),
                         controller: txtpost,
                       ),
                     ),
